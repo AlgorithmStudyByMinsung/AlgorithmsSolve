@@ -1,55 +1,55 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
-import java.io.*;
-import java.util.*;
+package twoPointer;
 
-public class Sort3_my_2 {
+import java.io.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Four {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
     static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static int[] A;
 
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
-
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
-    }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+        A = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            A[i] = scan.nextInt();
         }
-
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
-
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
-            }
-        });
-
-        return keySet.get(0);
     }
+
+    // target_idx 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
+    static boolean func(int target_idx) {
+        int L = 1, R = N;
+        int target = A[target_idx];
+        while (L < R) {
+            if (L == target_idx) L++;
+            else if (R == target_idx) R--;
+            else {
+                if (A[L] + A[R] > target) R--;
+                else if (A[L] + A[R] == target) return true;
+                else L++;
+            }
+        }
+        return false;
+    }
+
+    static void pro() {
+        // 최소, 최대를 빠르게 알기 위한 정렬
+        Arrays.sort(A, 1, N + 1);
+
+        int ans = 0;
+        for (int i = 1; i <= N; i++) {
+            // i 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
+            if (func(i)) ans++;
+        }
+        System.out.println(ans);
+    }
+
     public static void main(String[] args) {
         input();
-
-        Long sorting = sorting();
-        System.out.println(sorting);
-
+        pro();
     }
 
 

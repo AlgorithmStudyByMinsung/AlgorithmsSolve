@@ -1,55 +1,63 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
+package binarySearch;
+// https://www.acmicpc.net/problem/7795
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-public class Sort3_my_2 {
+public class Binary_1 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+    static int t;
+    static int n;
+    static int m;
+    static int[] a;
+    static int[] b;
 
-    static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static void input(){
+        n = scan.nextInt();
+        m = scan.nextInt();
 
-    static void input() {
-        N = scan.nextInt();
-        numbers = new Long[N];
+        a = new int[n +1];
+        b = new int[m +1];
 
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
+        for (int i = 1; i <=n ; i++) a[i] = scan.nextInt();
+        for (int i = 1; i <=m ; i++) b[i] = scan.nextInt();
     }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
-        }
 
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
+    static int binarySearch(int[]b, int L, int R, int X) {
+        int res = L -1;
+        while (L <= R) {
+            int mid = (L + R)/2;
 
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
+            if (b[mid] < X) {
+                res = mid;
+                L = mid +1;
+            }else {
+                R = mid -1;
             }
-        });
-
-        return keySet.get(0);
+        }
+        return res;
     }
+
+    static void pro(){
+        Arrays.sort(b, 1, m+1);
+
+        int ans = 0;
+
+        for (int i = 1; i <= n; i++) ans += binarySearch(b, 1, m, a[i]);
+        System.out.println(ans);
+    }
+
+
+
     public static void main(String[] args) {
-        input();
+        t = scan.nextInt();
 
-        Long sorting = sorting();
-        System.out.println(sorting);
-
+        for (int i = 0; i < t; i++) {
+            input();
+            pro();
+        }
     }
 
 

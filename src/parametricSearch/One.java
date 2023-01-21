@@ -1,55 +1,54 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
+package parametricSearch;
+
 import java.io.*;
 import java.util.*;
 
-public class Sort3_my_2 {
+public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
-    static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static int N, M;
+    static int[] A;
 
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
-
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
-    }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+        M = scan.nextInt();
+        A = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            A[i] = scan.nextInt();
         }
-
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
-
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
-            }
-        });
-
-        return keySet.get(0);
     }
+
+    static boolean determination(int H) {
+        // H 높이로 나무들을 잘랐을 때, M 만큼을 얻을 수 있으면 true, 없으면 false를 return하는 함수
+        long sum = 0;
+        for (int i = 1; i <= N; i++) {
+            if (A[i] > H) {
+                sum += A[i] - H;
+            }
+        }
+        return sum >= M;
+    }
+
+    static void pro() {
+        long L = 0, R = 2000000000, ans = 0;
+        // [L ... R] 범위 안에 정답이 존재한다!
+        // 이분 탐색과 determination 문제를 이용해서 answer를 빠르게 구하자!
+        while (L <= R) {
+            int mid = (int) ((L + R) / 2);
+            if (determination(mid)) {
+                ans = mid;
+                L = mid + 1;
+            } else {
+                R = mid - 1;
+            }
+        }
+        System.out.println(ans);
+    }
+
     public static void main(String[] args) {
         input();
-
-        Long sorting = sorting();
-        System.out.println(sorting);
-
+        pro();
     }
 
 

@@ -1,55 +1,68 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
+package parametricSearch;
+// https://www.acmicpc.net/problem/2805
 import java.io.*;
-import java.util.*;
-
-public class Sort3_my_2 {
+import java.util.Arrays;
+import java.util.StringTokenizer;
+/**
+ * 1. 자료형을 항상 먼저 생각 --> 시간 복잡도를 셍각
+ * 2. 이분 탐색 = 근사치, 특정 값보다 큰 것중에 최솟값, 같은 값 등등 이런 것들을 구할 수가 있다.
+ * 3. ~의 최대값 == 이분 탐색을 고려!
+ * 큰 것중에 가장 오른쪽 값
+ * 
+ * 정의 : 정답을 파라미터로 받아 이분 탐색을 한다.
+ **/
+public class One_my_1 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static int M;
+    static int[] a;
 
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
+        M = scan.nextInt();
 
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
-    }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+        a = new int[N +1];
+        for (int i = 1; i <=N ; i++) {
+            a[i] = scan.nextInt();
         }
-
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
-
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
-            }
-        });
-
-        return keySet.get(0);
     }
+
+    static long sum(int h) {
+        long sum = 0;
+
+        for (int i = 1; i <= N ; i++) {
+            if (a[i] > h) sum += a[i] - h;
+        }
+        return sum;
+    }
+
+    static void pro(){
+        Arrays.sort(a, 1, N+1);
+
+        int L = 0;
+        int R = a[N];
+
+        int res = R +1;
+
+        while (L <= R) {
+            int mid = (L + R)/2;
+
+            if (M <= sum(mid)) {
+                res = mid;
+                L = mid +1;
+            } else {
+                R = mid -1;
+            }
+        }
+        System.out.println(res);
+    }
+
     public static void main(String[] args) {
         input();
-
-        Long sorting = sorting();
-        System.out.println(sorting);
-
+        pro();
     }
 
 

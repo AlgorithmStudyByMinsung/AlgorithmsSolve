@@ -1,55 +1,60 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
+package twoPointer;
+// https://www.acmicpc.net/problem/2470
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-public class Sort3_my_2 {
+public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static int[] a;
 
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
+        a = new int[N +1];
 
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
-    }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+        for (int i = 1; i <=N ; i++) {
+            a[i] = scan.nextInt();
         }
+    }
+    static void pro() {
+        Arrays.sort(a, 1, N+1);
 
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
+        int L =1, R= a.length -1;
 
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
+        int l =L, r =R;
+        int min =Integer.MAX_VALUE;
+
+        while (L < R) {
+
+            int sum = a[L] + a[R];
+
+            if (sum > 0) {
+                if (min > Math.abs(sum)) {
+                    r = R; l = L; min = Math.abs(sum);
                 }
-                return Long.compare(o1, o2);
-            }
-        });
 
-        return keySet.get(0);
+                R -=1;
+            } else if (sum ==0) {
+                r = R; l = L;
+                break;
+            } else {
+                if (min > Math.abs(sum)) {
+                    r = R; l = L; min = Math.abs(sum);
+                }
+
+                L += 1;
+            }
+        }
+            sb.append(a[l]).append(' ').append(a[r]);
+        System.out.println(sb);
     }
     public static void main(String[] args) {
         input();
-
-        Long sorting = sorting();
-        System.out.println(sorting);
-
+        pro();
     }
 
 

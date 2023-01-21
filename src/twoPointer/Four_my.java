@@ -1,54 +1,67 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
-import java.io.*;
-import java.util.*;
+package twoPointer;
 
-public class Sort3_my_2 {
+import java.io.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Four_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
-
+    static int[] a;
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
+        a = new int[N +1];
 
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
-    }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+        for (int i = 1; i <= N ; i++) {
+            a[i] = scan.nextInt();
         }
-
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
-
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
-            }
-        });
-
-        return keySet.get(0);
     }
+    static boolean binarySearch(int x , int del) {
+        int L =1; int R = N;
+        int temp = a[del];
+        a[del] = Integer.MAX_VALUE;
+
+        while (L <=R) {
+            int mid = (L +R)/2;
+
+            if (a[mid] > x) {
+                R -=1;
+            } else if (a[mid] == x) {
+                a[del] = temp;
+                return true;
+            } else {
+                L +=1;
+            }
+        }
+        a[del] = temp;
+        return false;
+    }
+    static void pro() {
+        int ans = 0;
+        for (int i = 1; i <= N ; i++) {
+            int current = a[i];
+            boolean available = false;
+
+            for (int j = 1; j <= N ; j++) {
+                int target = a[i] - a[j];
+                if (binarySearch(target, j)) {
+                    available = true;
+                    break;
+                }
+
+            }
+            if (available) ans +=1;
+
+        }
+        System.out.println(ans);
+    }
+
     public static void main(String[] args) {
         input();
-
-        Long sorting = sorting();
-        System.out.println(sorting);
+        pro();
 
     }
 

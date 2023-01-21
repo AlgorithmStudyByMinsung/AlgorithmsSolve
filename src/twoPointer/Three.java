@@ -1,55 +1,47 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
+package twoPointer;
+
 import java.io.*;
 import java.util.*;
 
-public class Sort3_my_2 {
+public class Three {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
     static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static int[] A, cnt;
 
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
-
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
+        A = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            A[i] = scan.nextInt();
+        }
+        cnt = new int[100000 + 1];
     }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+
+    static void pro() {
+        long ans = 0;
+
+        for (int L=1, R=0; L<=N; L++){  // L 마다 R 을 최대한 옮겨 줄 계획이다.
+            // R 을 옮길 수 있는 만큼 옮긴다.
+            while (R + 1 <= N && cnt[A[R+1]] == 0){
+                R++;
+                cnt[A[R]]++;
+            }
+
+            // 정답을 갱신한다
+            ans += R - L + 1;
+
+            // L 을 옮겨주면서 A[L] 의 개수를 감소시킨다.
+            cnt[A[L]]--;
         }
 
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
-
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
-            }
-        });
-
-        return keySet.get(0);
+        System.out.println(ans);
     }
+
     public static void main(String[] args) {
         input();
-
-        Long sorting = sorting();
-        System.out.println(sorting);
-
+        pro();
     }
 
 

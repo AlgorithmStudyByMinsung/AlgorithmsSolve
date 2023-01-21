@@ -1,55 +1,66 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
-import java.io.*;
-import java.util.*;
+package binarySearch;
 
-public class Sort3_my_2 {
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+/**
+ * 순열을 사용하면 5만 * 10만이다
+ * 그리고 arraylist 를 사용하면 메모리 초가가 일어난다.
+ *
+ **/
+public class Binary_2_my_1 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static int[] a;
+    static List<Integer> selected = new ArrayList<>();
 
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
+        a = new int[N];
 
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
-    }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+        for (int i = 0; i < N; i++) {
+            a[i] = scan.nextInt();
         }
-
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
-
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
-            }
-        });
-
-        return keySet.get(0);
     }
+
+    static int[] ans = new int[2];
+    static void pro(int index, int cnt){
+        if (cnt==2) {
+            if (Math.abs(selected.get(0) + selected.get(1)) < Math.abs(ans[0] +ans[1])) {
+                ans[0] = selected.get(0);
+                ans[1] = selected.get(1);
+            }
+            return;
+        }
+        if (index == N) return;
+        /**
+         * add 라는 것은 integer 객체를 생성하고 집어넣는 것임
+         * 이걸 remove 한다고 해도 바로 삭제되는 것이 아니므로 메모리 초과가 일어난다.
+         **/
+        selected.add(a[index]);
+        pro(index +1, cnt +1);
+        selected.remove(selected.size()-1);
+
+        pro(index+1, cnt);
+    }
+
     public static void main(String[] args) {
         input();
 
-        Long sorting = sorting();
-        System.out.println(sorting);
+        ans[0] = 0;
+        ans[1] = Integer.MAX_VALUE;
 
+        pro(0, 0);
+
+        for (Integer an : ans) {
+            sb.append(an).append(' ');
+        }
+
+        System.out.println(sb);
     }
 
 
@@ -99,3 +110,4 @@ public class Sort3_my_2 {
         }
     }
 }
+

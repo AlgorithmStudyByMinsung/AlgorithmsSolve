@@ -1,56 +1,64 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
+package twoPointer;
+// https://www.acmicpc.net/problem/13144
+/**
+ * 투포인터의 원리:
+ *      다음 스텝이 이전 스텝의 결과를 가지고 잇어야한다.
+ *      그래서 이전 스텝을 하지 않아도 다음 스텝을 할 수 있게 한다.
+ * */
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 
-public class Sort3_my_2 {
+public class Three_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static int[] a;
+    /**
+     * 특정 값이 있는 지 확인하는 가장 좋은 방법 = 배열을 사용
+     * - 시간복잡도 1이다.
+     * - 근데 10만 넘어가면 메모리초과가 날 수 있으므로 꼭 계산이 필요
+     **/
+    static int[] check;
 
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
+        a = new int[N +1];
+        check = new int[N +1];
 
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
-    }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+        for (int i = 1; i <= N ; i++) {
+            a[i] = scan.nextInt();
         }
+    }
 
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
+    static void pro() {
+        long sum =0;
+        int R = 1;
 
-        keySet.sort(new Comparator<Long>() {
+        for (int L = 1; L <= N ; L++) {
             /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
-            }
-        });
+             * 이런식으로 해야한다. check[a[]] <-- 보통 이런 형식
+             **/
+            check[a[L -1]] = 0;
 
-        return keySet.get(0);
+            /**
+             * R이 계속 증가하고 있다. <-- 투포인터 이고 이래서 시간 복잡도가 N 이다.
+             **/
+            while (R <= N) {
+                if (check[a[R]] == 1) break;
+                check[a[R]] = 1;
+
+                R++;
+            }
+            sum += (R - L);
+        }
+        System.out.println(sum);
     }
     public static void main(String[] args) {
         input();
-
-        Long sorting = sorting();
-        System.out.println(sorting);
-
-    }
+        pro();
+        }
 
 
     static class FastReader {

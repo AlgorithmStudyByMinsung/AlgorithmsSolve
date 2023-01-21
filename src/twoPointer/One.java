@@ -1,55 +1,55 @@
-package bruteForce.sort;
-// https://www.acmicpc.net/problem/11652
-import java.io.*;
-import java.util.*;
+package twoPointer;
+//https://www.acmicpc.net/problem/1806
 
-public class Sort3_my_2 {
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static Long[] numbers;
-    static Map<Long, Integer> ans = new HashMap<>();
+    static int S;
+    static int[] a;
 
     static void input() {
         N = scan.nextInt();
-        numbers = new Long[N];
+        S = scan.nextInt();
+        a = new int[N +1];
 
-        for (int i = 0; i < N; i++) numbers[i] = scan.nextLong();
-    }
-    static Long sorting() {
-        for (Long number : numbers) {
-            ans.put(number, ans.get(number) == null ? 1 : ans.get(number) + 1);
+        for (int i = 1; i <=N; i++) {
+            a[i] = scan.nextInt();
         }
-
-        ArrayList<Long> keySet = new ArrayList<>(ans.keySet());
-
-        keySet.sort(new Comparator<Long>() {
-            /**
-             * long 타입을 comparator 하기
-             * 그리고 맞왜틀 일 시에는 음수도 확인하자
-             * */
-            @Override
-            public int compare(Long o1, Long o2) {
-                /**
-                 * Long 의 비교는 equals 를 사용해야 한다.
-                 **/
-                if (!ans.get(o2).equals(ans.get(o1))) {
-                    return ans.get(o2)- ans.get(o1);
-                }
-                return Long.compare(o1, o2);
-            }
-        });
-
-        return keySet.get(0);
     }
+
+    static void pro() {
+        int R = 0, sum = 0, ans = N+1;
+
+        for (int L = 1; L <=N ; L++) {
+            // sum 은 - a[l] 의 값
+            // sum 이 s 보다 작으면 추가로 sum 을 계산
+            // sum 을 구한다, 추가로 하나씩 더하고 s 가넘어가면 종료
+                // 그럼 R을 갱신
+            // sum이 s 와 같다면 ans 를 계산과 비교
+
+            sum -= a[L -1];
+
+            while (sum < S && R < N) {
+                R ++;
+                sum += a[R];
+            }
+            if (sum >= S) ans = Math.min(ans, R - L +1);
+        }
+        if (ans == N +1) ans =0;
+
+        System.out.println(ans);
+
+    }
+
     public static void main(String[] args) {
         input();
-
-        Long sorting = sorting();
-        System.out.println(sorting);
-
+        pro();
     }
 
 
