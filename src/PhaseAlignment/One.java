@@ -1,79 +1,62 @@
-package tree;
-
+package PhaseAlignment;
+// https://www.acmicpc.net/problem/2252
 import java.io.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
-public class Main {
+import java.util.*;
+/**
+ * 에초에 문제가 그래프라고 알려주고 있음
+ * */
+public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
-    static int N;
-    static int R;
+    static int N, M;
+    static int[] indeg;
+    /**
+     * 부모 노드를 저장하지 않음 --> 그 이유: 부모로 탐색을 안해도 된다.
+     * */
     static ArrayList<Integer>[] adj;
-    static int[] parents;
-    static boolean[] visit;
-    static int ans;
-    static int start;
 
     static void input() {
         N = scan.nextInt();
-        parents = new int[N];
-        visit = new boolean[N];
-        adj = new ArrayList[N];
-
-        for (int i = 0; i < N; i++) adj[i] = new ArrayList<>();
-
-
-        for (int i = 0; i < N; i++) {
-            int x= scan.nextInt();
-
-            if (x == -1) start = i;
-            if (x == -1) continue;
-
-            parents[i] = x;
-
-            adj[i].add(x); adj[x].add(i);
-        }
-
-        R = scan.nextInt();
-    }
-    static void remove_dfs(int x) {
-        visit[x] = true;
-
-        for (Integer integer : adj[x]) {
-            if (visit[integer]) continue;
-
-            remove_dfs(integer);
-        }
-//        adj[parents[x]].removeIf(integer -> integer==x);
-//        adj[x].removeIf(integer -> integer == parents[x]);
-    }
-
-    static void dfs(int x) {
-        visit[x] = true;
-
-
-        for (Integer integer : adj[x]) {
-            if (visit[integer]) continue;
-
-            if (adj[integer].size() == 1) ans ++;
-
-            dfs(integer);
+        M = scan.nextInt();
+        adj = new ArrayList[N + 1];
+        indeg = new int[N + 1];
+        for (int i = 1; i <= N; i++)
+            adj[i] = new ArrayList<>();
+        for (int i = 0; i < M; i++) {
+            int x = scan.nextInt(), y = scan.nextInt();
+            adj[x].add(y);
+            // indegree 계산하기
+            indeg[y]++;
         }
     }
+
+    static void pro() {
+        Deque<Integer> queue = new LinkedList<>();
+        // 제일 앞에 "정렬될 수 있는" 정점 찾기
+        for (int i = 1; i <= N; i++)
+            if (indeg[i] == 0)
+                queue.add(i);
+
+
+        // 정렬될 수 있는 정점이 있다면?
+        // 1. 정렬 결과에 추가하기
+        // 2. 정점과 연결된 간선 제거하기
+        // 3. 새롭게 "정렬 될 수 있는" 정점 Queue에 추가하기
+        while (!queue.isEmpty()) {
+            int x = queue.poll();
+            sb.append(x).append(' ');
+            for (int y : adj[x]) {
+                indeg[y]--;
+                if (indeg[y] == 0) queue.add(y);
+            }
+        }
+        System.out.println(sb);
+    }
+
     public static void main(String[] args) {
         input();
-
-        visit[parents[R]] = true;
-        remove_dfs(R);
-
-        visit[parents[R]] = false;
-
-        dfs(start);
-        System.out.println(ans);
-
+        pro();
     }
 
 

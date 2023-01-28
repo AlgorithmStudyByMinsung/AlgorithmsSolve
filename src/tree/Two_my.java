@@ -1,61 +1,83 @@
 package tree;
-// https://www.acmicpc.net/problem/11725
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-/**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
- *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
- * */
-public class One {
+
+public class Two_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
+    static int R;
     static ArrayList<Integer>[] adj;
     static int[] parents;
+    static boolean[] visit;
+    static int ans;
+    static int start;
+
     static void input() {
         N = scan.nextInt();
-        adj = new ArrayList[N +1];
-        parents = new int[N +1];
+        parents = new int[N];
+        visit = new boolean[N];
+        adj = new ArrayList[N];
 
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
+        for (int i = 0; i < N; i++) adj[i] = new ArrayList<>();
+
+
+        for (int i = 0; i < N; i++) {
+            int x= scan.nextInt();
+
+            if (x == -1) start = i;
+            if (x == -1) continue;
+
+            parents[i] = x;
+
+            adj[i].add(x); adj[x].add(i);
         }
 
-        for (int i = 1; i < N; i++) {
-            int x = scan.nextInt();
-            int y = scan.nextInt();
-
-            adj[x].add(y);
-            adj[y].add(x);
-        }
-
+        R = scan.nextInt();
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
+
+    // 지워야 할 노드로 부터 탐색을 시작한다.
+    // 그 후 visit 처리를 한다.
+    static void remove_dfs(int x) {
+        visit[x] = true;
 
         for (Integer integer : adj[x]) {
-            if (integer == par) continue;
-            dfs(integer, x);
+            if (visit[integer]) continue;
+
+            remove_dfs(integer);
         }
     }
+    // 자식이 1개인 노드들을 센다
+    static void dfs(int x) {
+        visit[x] = true;
+        if (adj[x].size() == 1) ans ++;
 
+        for (Integer integer : adj[x]) {
+            if (visit[integer]) continue;
+
+            dfs(integer);
+        }
+    }
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
 
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
+        if (R == start) {
+            System.out.println(0);
+            return;
         }
-        System.out.println(sb);
+
+        visit[parents[R]] = true;
+        remove_dfs(R);
+
+        visit[parents[R]] = false;
+
+        dfs(start);
+        System.out.println(ans);
+
     }
 
 

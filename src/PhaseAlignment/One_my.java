@@ -1,60 +1,87 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
+package PhaseAlignment;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 /**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
+ * 위상 정렬
+ * - 트리의 정렬 --> 트리에서 정렬한다면 위상 정렬을 생각해봐야한다.
+ * - inDegree 가 핵심
  *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
- * */
-public class One {
+ **/
+public class One_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
+    static int M;
     static ArrayList<Integer>[] adj;
-    static int[] parents;
+    /**
+     * 위상 정렬은 visit 이 안필요하다.
+     * bfs : 자식 중에 방문안한 걸 queue 에 집어넣는다.
+     * 위상정렬 : 자식 중에 inDegree 가 0인 애를 집어넣는다. --> 이렇게 해도 순회가 가능
+     **/
+    static boolean[] visit;
+    static int[] inDegree;
+
     static void input() {
         N = scan.nextInt();
+        M = scan.nextInt();
+        /**
+         * N +1 일 시에 0이 없어서 null 이 뜰 수도 있다.
+         **/
         adj = new ArrayList[N +1];
-        parents = new int[N +1];
+        visit = new boolean[N +1];
+        inDegree = new int[N +1];
 
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
-        }
+        for (int i = 1; i <= N ; i++) adj[i] = new ArrayList<>();
 
-        for (int i = 1; i < N; i++) {
+        for (int i = 0; i < M; i++) {
             int x = scan.nextInt();
             int y = scan.nextInt();
 
-            adj[x].add(y);
-            adj[y].add(x);
+            inDegree[y] ++;
+
+            adj[x].add(y); adj[y].add(x);
         }
 
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
+    static void bfs() {
+        Queue<Integer> queue = new LinkedList<>();
 
-        for (Integer integer : adj[x]) {
-            if (integer == par) continue;
-            dfs(integer, x);
+        // init
+        /**
+         * iter 은 코테에서는 안좋음
+         **/
+        for (int i = 1; i <= N ; i++) {
+            if (inDegree[i] == 0) {
+                queue.add(i);
+            }
         }
-    }
 
+        // bfs
+        while (! queue.isEmpty()) {
+            Integer x = queue.poll();
+            sb.append(x).append(' ');
+
+            for (Integer integer : adj[x]) {
+                inDegree[integer] --;
+
+                if (inDegree[integer] == 0) queue.add(integer);
+            }
+
+        }
+
+
+
+    }
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
+        bfs();
 
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
-        }
         System.out.println(sb);
     }
 
