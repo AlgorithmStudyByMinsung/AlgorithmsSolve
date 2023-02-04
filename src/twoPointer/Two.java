@@ -3,7 +3,23 @@ package twoPointer;
 import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-
+/**
+ * twoPointer 유형 2번 기본 : 근사치를 찾는다, 두개의 합, 두개의 치이 등등
+ *
+ * - 원리:
+ * 1. 정렬
+ * 2. 가장 작은거랑 가장 큰거랑 더했는데도 목표 값보다 작다면 가장 작은 값을 증가
+ * 반대라면 큰 값을 줄임
+ *
+ * - 스켈레톤
+ *      Arrays.sort
+ *
+ *      while(L < R){
+ *          if (작다면) L +=1
+ *          else if(크다면) R +=1
+ *          같다면 종료
+ *      }
+ * */
 public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();

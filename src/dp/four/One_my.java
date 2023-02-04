@@ -1,66 +1,76 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
+package dp.four;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 /**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
+ * 트리는 dfs!
  *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
+ *
  * */
-
-/**
- * tree 는 dfs
- * */
-public class One {
+public class One_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
+    static int R;
+    static int Q;
     static ArrayList<Integer>[] adj;
-    static int[] parents;
+    static int[] d;
+    static int[] ans;
+    static boolean[] visit;
+
     static void input() {
         N = scan.nextInt();
+        R = scan.nextInt();
+        Q = scan.nextInt();
         adj = new ArrayList[N +1];
-        parents = new int[N +1];
+        d = new int[N +1];
+        visit = new boolean[N +1];
+        ans = new int[Q];
 
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
-        }
+        for (int i = 1; i <= N ; i++) adj[i] = new ArrayList<>();
 
-        for (int i = 1; i < N; i++) {
+        for (int i = 0; i < N -1; i++) {
             int x = scan.nextInt();
             int y = scan.nextInt();
 
-            adj[x].add(y);
-            adj[y].add(x);
+            adj[x].add(y); adj[y].add(x);
+        }
+        for (int i = 0; i < Q; i++) {
+            int x= scan.nextInt();
+            ans[i] = x;
+        }
+    }
+
+    static int dfs(int x) {
+        visit[x] = true;
+        /**
+         * 이건 말단 노드라고 볼 수 없다! 왜냐면 자식이 한개있지만 말단 노드가 아닐 수 도 있다.
+         * */
+        if (adj[x].size() == 1) {
+            d[x] = 1;
+            return d[x];
         }
 
-    }
-    static void dfs(int x, int par) {
-        parents[x] = par;
 
         for (Integer integer : adj[x]) {
-            if (integer == par) continue;
+            if (visit[integer]) continue;
 
-            dfs(integer, x);
+//            System.out.println("x = " + x +"," + "integer= "+ integer);
+            d[x] += dfs(integer);
         }
+        d[x] += 1;
+        return d[x];
     }
 
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
-
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
+        dfs(R);
+        for (int an : ans) {
+            System.out.println(d[an]);
         }
-        System.out.println(sb);
     }
 
 

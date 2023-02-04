@@ -1,66 +1,64 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
+package dp.four;
+// https://www.acmicpc.net/problem/15681
 import java.io.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.*;
 /**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
+ * 트리를 이용한 dp
  *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
- * */
-
-/**
- * tree 는 dfs
+ * 트리는 dps 를 이용
  * */
 public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+    static int N, R, Q;
+    static ArrayList<Integer>[] con;
+    static int[] Dy;
 
-    static int N;
-    static ArrayList<Integer>[] adj;
-    static int[] parents;
-    static void input() {
+    static void input(){
         N = scan.nextInt();
-        adj = new ArrayList[N +1];
-        parents = new int[N +1];
-
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
+        R = scan.nextInt();
+        Q = scan.nextInt();
+        con = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++){
+            con[i] = new ArrayList<>();
         }
-
-        for (int i = 1; i < N; i++) {
-            int x = scan.nextInt();
-            int y = scan.nextInt();
-
-            adj[x].add(y);
-            adj[y].add(x);
+        for (int i = 1; i < N; i++){
+            int x = scan.nextInt(), y = scan.nextInt();
+            con[x].add(y);
+            con[y].add(x);
         }
-
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
 
-        for (Integer integer : adj[x]) {
-            if (integer == par) continue;
+    // Dy[x] 를 계산하는 함수
+    static void dfs(int x, int prev){
+        /**
+         * 이렇게 하면 마지막 자식은 1이 된다.
+         * */
+        Dy[x] = 1;
 
-            dfs(integer, x);
+        for (int y: con[x]){
+            if (y == prev) continue;
+            dfs(y, x);
+            Dy[x] += Dy[y];
         }
+    }
+
+    static void pro() {
+        Dy = new int[N + 1];
+
+        dfs(R, -1);
+
+        for (int i = 1; i <= Q; i++){
+            int q = scan.nextInt();
+            sb.append(Dy[q]).append('\n');
+        }
+        System.out.println(sb);
     }
 
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
-
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
-        }
-        System.out.println(sb);
+        pro();
     }
 
 

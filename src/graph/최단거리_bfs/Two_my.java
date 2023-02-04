@@ -1,76 +1,69 @@
-package graph.bfs_deep;
-// https://www.acmicpc.net/problem/2178
+package graph.최단거리_bfs;
+// https://www.acmicpc.net/problem/1697
 import java.io.*;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class One {
+public class Two_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static int M;
-    static String[] a;
-    static boolean visited[][];
-    static int[][] dir = new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-    static int dist[][];
+    static int K;
+    static int[] dist;
+    static boolean[] visit;
 
     static void input() {
         N = scan.nextInt();
-        M = scan.nextInt();
-        a = new String[N];
-        dist = new int[N][M];
-        visited = new boolean[N][M];
+        K = scan.nextInt();
 
+        dist = new int[100001];
+        visit = new boolean[100001];
+    }
+    static List<Integer> children(int x) {
+        List<Integer> arrayList = new ArrayList<>();
 
-        for (int i = 0; i < N; i++) {
-            a[i] = scan.next();
-        }
+        if (x -1 >= 0 && x -1 <= 100000) arrayList.add(x -1);
+        if (x +1 >= 0 && x +1 <= 100000) arrayList.add(x +1);
+        if (2*x >= 0 && 2*x <= 100000) arrayList.add(2*x);
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                dist[i][j] = -1;
-            }
-        }
-
-
+        return arrayList;
     }
     static void bfs() {
-        Queue<Integer> queue = new LinkedList();
+        Queue<Integer> queue = new LinkedList<>();
 
-        queue.add(0);
-        queue.add(0);
-        visited[0][0] = true;
-        dist[0][0] = 1;
+        queue.add(N);
+        visit[N] = true;
+
+        boolean check = false;
 
         while (!queue.isEmpty()) {
             Integer x = queue.poll();
-            Integer y = queue.poll();
-//            sb.append(x).append(' ').append(y).append('\n');
 
-            for (int i = 0; i < 4; i++) {
-                int nx = x + dir[i][0];
-                int ny = y + dir[i][1];
+            for (Integer child : children(x)) {
 
-                if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
-                if (visited[nx][ny]) continue;
-                if (a[nx].charAt(ny) == '0') continue;
+                if (visit[child]) continue;
 
-                queue.add(nx); queue.add(ny);
+                queue.add(child);
+                visit[child] = true;
+                dist[child] = dist[x] +1;
 
-                dist[nx][ny] = dist[x][y] +1;
-                visited[nx][ny] = true;
+                if (child == K) {
+                    check = true; break;
+                }
+
+//                sb.append("dist = ").append(dist[child]).append(' ').append("child = ").append(' ').append(child).append('\n');
             }
+            if (check) break;
         }
 
     }
+
     public static void main(String[] args) {
         input();
         bfs();
 //        System.out.println(sb);
-        System.out.println(dist[N -1][M -1]);
+        System.out.println(dist[K]);
     }
 
 

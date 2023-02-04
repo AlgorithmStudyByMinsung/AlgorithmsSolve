@@ -1,65 +1,65 @@
-package PhaseAlignment;
-// https://www.acmicpc.net/problem/1005
+package dp.three;
+// https://www.acmicpc.net/problem/11066
+/**
+ * DP 의 3번 째 유형 : 구간
+ *
+ * 가장 작은 값을 제일 작은 구간으로 지정
+ * d[i][j]  를 i ~ j 까지로 한다.
+ * */
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
-public class Main {
+public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-    static int N, M;
-    static int[] indeg, T_done, T;
-    static ArrayList<Integer>[] adj;
+    static int K, Q;
+    static int[] num;
+    static int[][] Dy, sum;
 
-    static void input() {
-        N = scan.nextInt();
-        M = scan.nextInt();
-        adj = new ArrayList[N + 1];
-        indeg = new int[N + 1];
-        T = new int[N + 1];
-        T_done = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
-            T[i] = scan.nextInt();
+    static void input(){
+        K = scan.nextInt();
+        num = new int[K + 1];
+        sum = new int[K + 1][K + 1];
+        for (int i = 1; i <= K; i++){
+            num[i] = scan.nextInt();
         }
-        for (int i = 0; i < M; i++) {
-            int x = scan.nextInt(), y = scan.nextInt();
-            adj[x].add(y);
-            // indegree 계산하기
-            indeg[y]++;
+    }
+
+    static void preprocess(){
+        // 문제의 특성상 전처리 과정
+        for (int i = 1; i <= K; i++){
+            for (int j = i; j <= K; j++){
+                sum[i][j] = sum[i][j - 1] + num[j];
+            }
         }
     }
 
     static void pro() {
-        Deque<Integer> queue = new LinkedList<>();
-        // 제일 앞에 "정렬될 수 있는" 정점 찾기
-        for (int i = 1; i <= N; i++)
-            if (indeg[i] == 0) {
-                queue.add(i);
-                T_done[i] = T[i];
-            }
+        preprocess();
+        // i == j 일 때 d[i][j] 는 0으로 설정!
+        Dy = new int[K + 1][K + 1];
 
-        // 위상 정렬 순서대로 T_done 계산을 함께 해주기
-        while (!queue.isEmpty()) {
-            int x = queue.poll();
-            for (int y : adj[x]) {
-                indeg[y]--;
-                if (indeg[y] == 0) queue.add(y);
+        for (int len = 2; len <= K; len ++){
+            for (int i = 1; i <= K - len + 1; i++){
                 /**
-                 * 큐에 넣는 거랑은 별개
+                 * j 를 for 문으로 돌리는 것이 아니다!
                  * */
-                T_done[y] = Math.max(T_done[y], T_done[x] + T[y]);
+                int j = i + len - 1;
+
+                Dy[i][j] = Integer.MAX_VALUE;
+                for (int k = i; k < j; k++){
+                    Dy[i][j] = Math.min(Dy[i][j], Dy[i][k] + Dy[k + 1][j] + sum[i][j]);
+                }
             }
         }
-        int W = scan.nextInt();
-        System.out.println(T_done[W]);
+
+        System.out.println(Dy[1][K]);
     }
 
     public static void main(String[] args) {
-        int Q = scan.nextInt();
-        while (Q > 0) {
-            Q--;
+        Q = scan.nextInt();
+        for (int rep = 1; rep<=Q;rep++) {
             input();
             pro();
         }

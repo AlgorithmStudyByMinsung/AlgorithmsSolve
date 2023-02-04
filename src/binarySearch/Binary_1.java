@@ -3,7 +3,10 @@ package binarySearch;
 import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-
+/**
+ * 이분 탐색의 사간복잡도는 N 이다.
+ * 하지만 정렬이 NLog N 이다.
+ * */
 public class Binary_1 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();

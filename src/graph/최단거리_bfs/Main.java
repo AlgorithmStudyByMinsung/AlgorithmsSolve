@@ -1,5 +1,5 @@
-package graph.bfs_deep;
-
+package graph.최단거리_bfs;
+// https://www.acmicpc.net/problem/3055
 import java.io.*;
 import java.util.*;
 /**
@@ -8,7 +8,11 @@ import java.util.*;
  * multi_source bfs : 시작점을 여러개를 넣는다.
  *
  **/
-public class Three {
+
+/**
+ * 유의 사항: dist 배열 만들 때 -1 을 넣어서 안간 곳을 확인
+ * */
+public class Main {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 

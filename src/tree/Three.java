@@ -1,94 +1,87 @@
-package graph;
-// https://www.acmicpc.net/problem/1260
-/**
- * bfs 와 dfs 의 기본
- *
- * - 특징: 자식이 방문 됫으면 안간다.
- **/
-import java.io.*;
-import java.util.*;
+package tree;
 
-public class One {
+import java.io.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+// https://www.acmicpc.net/problem/4803
+public class Three {
+    /**
+     * 트리의 특성을 살린 문제
+     * */
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
     static int M;
-    static int V;
     static ArrayList<Integer>[] adj;
-    static boolean[] visited;
+    static boolean[] visit;
+    static int vertex;
+    static int edges;
 
     static void input() {
+        /**
+         * test case 문제에서는 이렇게 하면 새로 다시 만들어진다.
+         * */
         N = scan.nextInt();
         M = scan.nextInt();
-        V = scan.nextInt();
-        visited = new boolean[N+1];
-        adj = new ArrayList[N+1];
 
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
-        }
-        for (int i = 1; i <= M; i++) {
+        adj = new ArrayList[N +1];
+        visit = new boolean[N +1];
+
+        for (int i = 1; i <= N ; i++) adj[i] = new ArrayList<>();
+
+        for (int i = 0; i < M; i++) {
             int x = scan.nextInt();
             int y = scan.nextInt();
 
-            adj[x].add(y);
-            adj[y].add(x);
-        }
-        for (int i = 1; i <=N ; i++) {
-            Collections.sort(adj[i]);
+            adj[x].add(y); adj[y].add(x);
         }
 
     }
 
     static void dfs(int x) {
-        visited[x] = true;
-        sb.append(x).append(' ');
+        visit[x] = true;
+        vertex ++;
 
         for (Integer integer : adj[x]) {
-            if (visited[integer]) continue;
+            edges ++;
+
+            if (visit[integer]) continue;
 
             dfs(integer);
         }
     }
 
-    static void bfs(int x) {
-        Queue<Integer> queue = new LinkedList<>();
+    static void pro(int i) {
+        int ans = 0;
 
-        // init
-        queue.add(x);
-        visited[x] = true;
+        for (int j = 1; j <= N ; j++) {
+            if (visit[j]) continue;
+            vertex = 0;
+            edges = 0;
 
-        while (!queue.isEmpty()) {
-            Integer poll = queue.poll(); // 여기서 visit 처리 x
-            sb.append(poll).append(' ');
+            dfs(j);
 
-            for (Integer integer : adj[poll]) {
-                /**
-                 * 자식 기준으로 continue 처리와 visit 처리를 해준다.
-                 **/
-                if (visited[integer]) continue;
-
-                queue.add(integer);
-                visited[integer] = true;
-            }
-
+            if (edges == (vertex -1)*2) ans ++;
         }
-
-
-
+        sb.append("Case").append(' ').append(i).append(": ");
+        if (ans == 0) {
+            sb.append("No trees.").append('\n');
+        } else if (ans == 1) {
+            sb.append("There is one tree.").append('\n');
+        } else {
+            sb.append("A forest of ").append(ans).append(" trees.").append('\n');
+        }
     }
 
     public static void main(String[] args) {
-        input();
-        dfs(V);
-        sb.append('\n');
-
-        for (int i = 1; i <= N ; i++) visited[i] = false;
-
-        bfs(V);
-
+        for (int i = 1;; i++) {
+            input();
+            if (N == 0 && M == 0) break;
+            // visit 배열 초기화
+            pro(i);
+        }
         System.out.println(sb);
     }
 

@@ -1,66 +1,56 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
+package bruteForce.deep;
+
 import java.io.*;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 /**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
- *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
+ * 순열 !! 기본
  * */
-
-/**
- * tree 는 dfs
- * */
-public class One {
+public class 순열_기본 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
-    static int N;
-    static ArrayList<Integer>[] adj;
-    static int[] parents;
+    static int N, M;
+    static char[] chars;
+    /**
+     * selected 배열을 만들어서
+     * 고른 것을 넣는다.
+     * */
+    static int[] selected;
+
     static void input() {
         N = scan.nextInt();
-        adj = new ArrayList[N +1];
-        parents = new int[N +1];
+        M = scan.nextInt();
+
+        chars = new char[N +1];
+        selected = new int[M +1];
+
+        String[] tokens = scan.nextLine().split(" ");
 
         for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
+            chars[i] = tokens[i -1].charAt(0);
         }
-
-        for (int i = 1; i < N; i++) {
-            int x = scan.nextInt();
-            int y = scan.nextInt();
-
-            adj[x].add(y);
-            adj[y].add(x);
-        }
-
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
 
-        for (Integer integer : adj[x]) {
-            if (integer == par) continue;
-
-            dfs(integer, x);
+    static void rec_func(int k) {
+        if (k == N +1) {
+            return;
         }
+
+        /**
+         * 전에 고른거에 하나 증가된 것부터 시작
+         * k 가 증가된 상태이므로 -1 을 해준다.
+         * */
+        for (int i = selected[k -1] +1; i <= M; i++) {
+            selected[k] = i;
+            rec_func(k +1);
+            selected[k] = 0;
+        }
+
     }
 
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
-
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
-        }
-        System.out.println(sb);
     }
 
 

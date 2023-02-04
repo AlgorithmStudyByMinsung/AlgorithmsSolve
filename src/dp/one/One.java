@@ -1,58 +1,47 @@
-package twoPointer;
-//https://www.acmicpc.net/problem/1806
-
+package dp.one;
+// https://www.acmicpc.net/problem/9095
 import java.io.*;
-import java.util.StringTokenizer;
-/**
- * twoPointer 유형 1번
- *
- *  키워드 : 연속된 수열, 순서를 지키며
- * */
+import java.util.*;
+
 public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+    static int[] Dy;
 
-    static int N;
-    static int S;
-    static int[] a;
+    /**
+     * test Case 문제는 미리 만들어 놓고 해야한다.
+     * */
+    static void preprocess(){
+        /**
+         * dp는 이걸 만들어야 한다.
+         * */
+        Dy = new int[12];
+        // 초기값 구하기
+        Dy[1] = 1;
+        Dy[2] = 2;
+        Dy[3] = 4;
 
-    static void input() {
-        N = scan.nextInt();
-        S = scan.nextInt();
-        a = new int[N +1];
-
-        for (int i = 1; i <=N; i++) {
-            a[i] = scan.nextInt();
+        // 점화식을 토대로 Dy 배열 채우기
+        for (int i = 4; i <= 11; i++){
+            Dy[i] = Dy[i - 1] + Dy[i - 2] + Dy[i - 3];
         }
     }
 
+    /**
+     * 미리 만들어 놓고 할 수 있음 만들어 놓자
+     **/
     static void pro() {
-        int R = 0, sum = 0, ans = N+1;
-
-        for (int L = 1; L <=N ; L++) {
-            // sum 은 - a[l] 의 값
-            // sum 이 s 보다 작으면 추가로 sum 을 계산
-            // sum 을 구한다, 추가로 하나씩 더하고 s 가넘어가면 종료
-                // 그럼 R을 갱신
-            // sum이 s 와 같다면 ans 를 계산과 비교
-
-            sum -= a[L -1];
-
-            while (sum < S && R < N) {
-                R ++;
-                sum += a[R];
-            }
-            if (sum >= S) ans = Math.min(ans, R - L +1);
+        int T = scan.nextInt();
+        for (int tt = 1; tt <= T; tt++){
+            int N = scan.nextInt();
+            sb.append(Dy[N]).append('\n');
         }
-        if (ans == N +1) ans =0;
-
-        System.out.println(ans);
-
+        System.out.print(sb);
     }
 
     public static void main(String[] args) {
-        input();
+        preprocess();
         pro();
     }
 

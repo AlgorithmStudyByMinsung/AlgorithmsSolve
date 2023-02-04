@@ -1,4 +1,4 @@
-package graph;
+package graph.그래프가_아니지만_그래프문제;
 import java.io.*;
 import java.util.*;
 

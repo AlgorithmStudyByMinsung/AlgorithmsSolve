@@ -1,4 +1,4 @@
-package graph;
+package graph.그래프가_아니지만_그래프문제;
 // https://www.acmicpc.net/problem/2251
 import java.io.*;
 import java.util.ArrayList;
@@ -10,7 +10,8 @@ import java.util.StringTokenizer;
  * 하지만 브루트 포스는 모든 것을 다 간다면
  * 이건 자식들만 간다.
  * 자식 == 갈 수 있는 경우의 수
- * 
+ *
+ *
  * */
 public class Three_my {
     static FastReader scan = new FastReader();

@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 /**
  * 위상 정렬
  * - 트리의 정렬 --> 트리에서 정렬한다면 위상 정렬을 생각해봐야한다.
+ *            --> 트리에서의 순서
  * - inDegree 가 핵심
  *
  **/

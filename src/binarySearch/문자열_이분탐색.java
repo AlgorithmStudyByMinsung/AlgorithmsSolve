@@ -1,66 +1,75 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
+package binarySearch;
+// https://www.acmicpc.net/problem/1764
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 /**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
+ * String 이나 Char 도 사전 순으로 정렬이 된다.
  *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
- * */
-
-/**
- * tree 는 dfs
- * */
-public class One {
+ * 비교시에는 compareTo 를 사용하면 된다.
+ **/
+public class 문자열_이분탐색 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static ArrayList<Integer>[] adj;
-    static int[] parents;
+    static int M;
+    static String[] a;
+    static String[] b;
+    static ArrayList<String> ans = new ArrayList<>();
+
     static void input() {
         N = scan.nextInt();
-        adj = new ArrayList[N +1];
-        parents = new int[N +1];
+        M = scan.nextInt();
 
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
-        }
+        a = new String[N];
+        b = new String[M];
 
-        for (int i = 1; i < N; i++) {
-            int x = scan.nextInt();
-            int y = scan.nextInt();
-
-            adj[x].add(y);
-            adj[y].add(x);
-        }
-
+        for (int i = 0; i < N; i++) a[i] = scan.nextLine();
+        for (int i = 0; i < M; i++) b[i] = scan.nextLine();
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
 
-        for (Integer integer : adj[x]) {
-            if (integer == par) continue;
+    static boolean binarySearch(int L, int R, String x) {
+        boolean res = false;
 
-            dfs(integer, x);
+        while (L <= R) {
+            int mid = (L + R)/ 2;
+            if (b[mid].compareTo(x) < 0) {
+                L = mid + 1;
+            } else if (b[mid].compareTo(x) > 0) {
+                R = mid - 1;
+            } else {
+                res = true;
+                break;
+            }
         }
+
+        return res;
+    }
+
+    static void pro() {
+        Arrays.sort(b);
+        Arrays.sort(a);
+
+        for (int i = 0; i < N; i++) {
+            boolean available = binarySearch(0, M - 1, a[i]);
+
+            if (available) ans.add(a[i]);
+        }
+
+        sb.append(ans.size()).append('\n');
+
+        for (String an : ans) sb.append(an).append('\n');
+
+        System.out.println(sb);
     }
 
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
+        pro();
 
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
-        }
-        System.out.println(sb);
     }
 
 

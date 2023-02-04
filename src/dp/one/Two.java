@@ -1,69 +1,35 @@
-package graph.bfs_deep;
-// https://www.acmicpc.net/problem/1697
+package dp.one;
+
 import java.io.*;
 import java.util.*;
 
-public class Two_my {
+public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
     static int N;
-    static int K;
-    static int[] dist;
-    static boolean[] visit;
+    static int[] Dy;
 
-    static void input() {
+    static void input(){
         N = scan.nextInt();
-        K = scan.nextInt();
-
-        dist = new int[100001];
-        visit = new boolean[100001];
     }
-    static List<Integer> children(int x) {
-        List<Integer> arrayList = new ArrayList<>();
 
-        if (x -1 >= 0 && x -1 <= 100000) arrayList.add(x -1);
-        if (x +1 >= 0 && x +1 <= 100000) arrayList.add(x +1);
-        if (2*x >= 0 && 2*x <= 100000) arrayList.add(2*x);
+    static void pro() {
+        Dy = new int[1005];
+        // 초기값 구하기
+        Dy[1] = 1;
+        Dy[2] = 2;
 
-        return arrayList;
-    }
-    static void bfs() {
-        Queue<Integer> queue = new LinkedList<>();
-
-        queue.add(N);
-        visit[N] = true;
-
-        boolean check = false;
-
-        while (!queue.isEmpty()) {
-            Integer x = queue.poll();
-
-            for (Integer child : children(x)) {
-
-                if (visit[child]) continue;
-
-                queue.add(child);
-                visit[child] = true;
-                dist[child] = dist[x] +1;
-
-                if (child == K) {
-                    check = true; break;
-                }
-
-//                sb.append("dist = ").append(dist[child]).append(' ').append("child = ").append(' ').append(child).append('\n');
-            }
-            if (check) break;
+        // 점화식을 토대로 Dy 배열 채우기
+        for (int i = 3; i <= N; i++){
+            Dy[i] = (Dy[i - 1] + Dy[i - 2]) % 10007;
         }
-
+        System.out.println(Dy[N]);
     }
 
     public static void main(String[] args) {
         input();
-        bfs();
-//        System.out.println(sb);
-        System.out.println(dist[K]);
+        pro();
     }
 
 

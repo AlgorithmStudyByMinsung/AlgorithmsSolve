@@ -1,66 +1,52 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
-import java.io.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-/**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
- *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
- * */
+package dp.two;
 
-/**
- * tree 는 dfs
- * */
-public class One {
+import java.io.*;
+import java.util.*;
+
+public class Four {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
     static int N;
-    static ArrayList<Integer>[] adj;
-    static int[] parents;
+    static int[][] Dy;
+    static int[] A;
+
     static void input() {
         N = scan.nextInt();
-        adj = new ArrayList[N +1];
-        parents = new int[N +1];
-
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
-        }
-
-        for (int i = 1; i < N; i++) {
-            int x = scan.nextInt();
-            int y = scan.nextInt();
-
-            adj[x].add(y);
-            adj[y].add(x);
-        }
-
+        A = new int[N + 1];
+        Dy = new int[N + 1][10];
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
 
-        for (Integer integer : adj[x]) {
-            if (integer == par) continue;
-
-            dfs(integer, x);
+    static void pro() {
+        // 초기값 구하기
+        for (int num = 0; num <= 9; num++) {
+            Dy[1][num] = 1;
         }
+
+        // 점화식을 토대로 Dy 배열 채우기
+        for (int len = 2; len <= N; len++) {
+            for (int num = 0; num <= 9; num++) {
+                // 길이가 len이고 num으로 끝나는 개수를 계산하자 == Dy[len][num] 을 계산하자.
+                for (int prev = 0; prev <= num; prev++) {
+                    Dy[len][num] += Dy[len - 1][prev];
+                    Dy[len][num] %= 10007;
+                }
+            }
+        }
+
+        // Dy배열로 정답 계산하기
+        int ans = 0;
+        for (int num = 0; num <= 9; num++) {
+            ans += Dy[N][num];
+            ans %= 10007;
+        }
+
+        System.out.println(ans);
     }
 
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
-
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
-        }
-        System.out.println(sb);
+        pro();
     }
 
 

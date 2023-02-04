@@ -1,66 +1,52 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
+package dp.two;
+// http://boj.kr/2579
 import java.io.*;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
-/**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
- *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
- * */
 
-/**
- * tree 는 dfs
- * */
-public class One {
+public class Three_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static ArrayList<Integer>[] adj;
-    static int[] parents;
+    static int[] a;
+    static int[][] d;
     static void input() {
         N = scan.nextInt();
-        adj = new ArrayList[N +1];
-        parents = new int[N +1];
+        a = new int[N +1];
+        d = new int[N +1][N +1];
 
-        for (int i = 1; i <= N; i++) {
-            adj[i] = new ArrayList<>();
-        }
-
-        for (int i = 1; i < N; i++) {
-            int x = scan.nextInt();
-            int y = scan.nextInt();
-
-            adj[x].add(y);
-            adj[y].add(x);
-        }
-
+        for (int i = 1; i <= N; i++) a[i] = scan.nextInt();
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
 
-        for (Integer integer : adj[x]) {
-            if (integer == par) continue;
-
-            dfs(integer, x);
+    static void pro() {
+        /**
+         * 예외 처리를 안하면 인덱스 out 예외 가 터진다.
+         * */
+        if (N <3)  {
+            if (N == 1) System.out.println(a[1]);
+            if (N == 2) System.out.println(a[2] + a[1]);
+            return;
         }
+
+        d[1][1] = a[1];
+        d[1][2] = -1;
+
+        d[2][1] = a[2];
+        d[2][2] = a[2] + a[1];
+
+        for (int i = 3; i <= N ; i++) {
+            d[i][1] = Math.max(d[i -2][1], d[i -2][2]) + a[i];
+
+            d[i][2] = d[i -1][1] + a[i];
+        }
+        int ans = Math.max(d[N][1], d[N][2]);
+        System.out.println(ans);
     }
 
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
-
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
-        }
-        System.out.println(sb);
+        pro();
     }
 
 

@@ -1,95 +1,80 @@
-package graph;
-// https://www.acmicpc.net/problem/14502
+package graph.최단거리_bfs;
+// https://www.acmicpc.net/problem/2178
 import java.io.*;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
-
-public class Four_my {
+/**
+ * 가중치가 1인 최단거리
+ *
+ * - bfs 와 dist
+ **/
+public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
     static int M;
-    static int[][] a;
-    static int max = Integer.MIN_VALUE;
-    static int[][] dir = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0,-1}};
+    static String[] a;
     static boolean visited[][];
-    static int block;
+    static int[][] dir = new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    static int dist[][];
 
     static void input() {
         N = scan.nextInt();
         M = scan.nextInt();
-
-        a = new int[N][M];
+        a = new String[N];
+        dist = new int[N][M];
         visited = new boolean[N][M];
+
+
+        for (int i = 0; i < N; i++) {
+            a[i] = scan.next();
+        }
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                a[i][j] = scan.nextInt();
-                if (a[i][j] == 1) block ++;
+                dist[i][j] = -1;
             }
         }
+
+
     }
-    static int sum_dfs = 0;
-    static void dfs(int x, int y) {
-        visited[x][y] = true;
-        sum_dfs ++;
+    static void bfs() {
+        Queue<Integer> queue = new LinkedList();
 
-        for (int i = 0; i <4 ; i++) {
-            int nx = x + dir[i][0];
-            int ny = y + dir[i][1];
+        queue.add(0);
+        queue.add(0);
+        visited[0][0] = true;
+        dist[0][0] = 1;
 
-            if (nx < 0 || nx >=N || ny < 0 || ny >=M) continue;
-            if (visited[nx][ny]) continue;
+        while (!queue.isEmpty()) {
+            Integer x = queue.poll();
+            Integer y = queue.poll();
+//            sb.append(x).append(' ').append(y).append('\n');
 
-            if (a[nx][ny] == 0) {
-                dfs(nx, ny);
-            }
-        }
-    }
-    static int sumFunc() {
-        for (int i = 0; i <N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (a[i][j] == 2) {
-                    dfs(i, j);
-                }
-            }
-        }
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dir[i][0];
+                int ny = y + dir[i][1];
 
-        return N*M - block - sum_dfs -3;
-    }
-    static void go(int nx, int ny, int x) {
-        if (x == 3) {
-            max = Math.max(sumFunc(), max);
+                if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
+                if (visited[nx][ny]) continue;
+                if (a[nx].charAt(ny) == '0') continue;
 
-            sum_dfs =0;
-            for (int i = 0; i < N; i++) {
-                for (int j = 0; j < M; j++) {
-                    visited[i][j] =false;
-                }
-            }
-            return;
-        }
+                queue.add(nx); queue.add(ny);
 
-        for (int i = nx; i < N; i++) {
-            for (int j = (x == nx ? ny : 0); j < M; j++) {
-                if (a[i][j]== 0) {
-                    // 벽을 세우기
-                    a[i][j] =1;
-                    go(i, j, x+1);
-                    a[i][j] =0;
-                }
+                dist[nx][ny] = dist[x][y] +1;
+                visited[nx][ny] = true;
             }
         }
 
     }
-
-
     public static void main(String[] args) {
         input();
-        go(0,0,0);
-
-        System.out.println(max);
+        bfs();
+//        System.out.println(sb);
+        System.out.println(dist[N -1][M -1]);
     }
 
 

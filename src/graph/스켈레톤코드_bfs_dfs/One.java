@@ -1,65 +1,94 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
-import java.io.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+package graph.스켈레톤코드_bfs_dfs;
+// https://www.acmicpc.net/problem/1260
 /**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
+ * bfs 와 dfs 의 기본
  *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
- * */
+ * - 특징: 자식이 방문 됫으면 안간다.
+ **/
+import java.io.*;
+import java.util.*;
 
-/**
- * tree 는 dfs
- * */
 public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
+    static int M;
+    static int V;
     static ArrayList<Integer>[] adj;
-    static int[] parents;
+    static boolean[] visited;
+
     static void input() {
         N = scan.nextInt();
-        adj = new ArrayList[N +1];
-        parents = new int[N +1];
+        M = scan.nextInt();
+        V = scan.nextInt();
+        visited = new boolean[N+1];
+        adj = new ArrayList[N+1];
 
         for (int i = 1; i <= N; i++) {
             adj[i] = new ArrayList<>();
         }
-
-        for (int i = 1; i < N; i++) {
+        for (int i = 1; i <= M; i++) {
             int x = scan.nextInt();
             int y = scan.nextInt();
 
             adj[x].add(y);
             adj[y].add(x);
         }
+        for (int i = 1; i <=N ; i++) {
+            Collections.sort(adj[i]);
+        }
 
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
+
+    static void dfs(int x) {
+        visited[x] = true;
+        sb.append(x).append(' ');
 
         for (Integer integer : adj[x]) {
-            if (integer == par) continue;
+            if (visited[integer]) continue;
 
-            dfs(integer, x);
+            dfs(integer);
         }
+    }
+
+    static void bfs(int x) {
+        Queue<Integer> queue = new LinkedList<>();
+
+        // init
+        queue.add(x);
+        visited[x] = true;
+
+        while (!queue.isEmpty()) {
+            Integer poll = queue.poll(); // 여기서 visit 처리 x
+            sb.append(poll).append(' ');
+
+            for (Integer integer : adj[poll]) {
+                /**
+                 * 자식 기준으로 continue 처리와 visit 처리를 해준다.
+                 **/
+                if (visited[integer]) continue;
+
+                queue.add(integer);
+                visited[integer] = true;
+            }
+
+        }
+
+
+
     }
 
     public static void main(String[] args) {
         input();
-        dfs(1, -1);
+        dfs(V);
+        sb.append('\n');
 
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
-        }
+        for (int i = 1; i <= N ; i++) visited[i] = false;
+
+        bfs(V);
+
         System.out.println(sb);
     }
 

@@ -1,66 +1,67 @@
-package tree;
-// https://www.acmicpc.net/problem/11725
+package PhaseAlignment;
+// https://www.acmicpc.net/problem/1005
 import java.io.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-/**
- * 트리 = 사이클이 존재하지 않음
- * 특성 : 사이클 X == 하나의 정점에 inDegree 가 하나다
- *              == 따라서 자식들만 저장해도 모두 탐색을 할 수 있다.
- *              == 왜냐면 inDegree 가 여러개(사이클이 존재 할 수 있다.)
- *              == 여러개면 visit check 를 해줘야 한다.
- *              == 부모만 잘 설정해준다면 visit 을 안해도 된다.
- *
- * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
- * */
+import java.util.*;
 
-/**
- * tree 는 dfs
- * */
-public class One {
+public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
-    static int N;
+    static int N, M;
+    static int[] indeg, T_done, T;
     static ArrayList<Integer>[] adj;
-    static int[] parents;
+
     static void input() {
         N = scan.nextInt();
-        adj = new ArrayList[N +1];
-        parents = new int[N +1];
-
+        M = scan.nextInt();
+        adj = new ArrayList[N + 1];
+        indeg = new int[N + 1];
+        T = new int[N + 1];
+        T_done = new int[N + 1];
         for (int i = 1; i <= N; i++) {
             adj[i] = new ArrayList<>();
+            T[i] = scan.nextInt();
         }
-
-        for (int i = 1; i < N; i++) {
-            int x = scan.nextInt();
-            int y = scan.nextInt();
-
+        for (int i = 0; i < M; i++) {
+            int x = scan.nextInt(), y = scan.nextInt();
             adj[x].add(y);
-            adj[y].add(x);
+            // indegree 계산하기
+            indeg[y]++;
         }
-
     }
-    static void dfs(int x, int par) {
-        parents[x] = par;
 
-        for (Integer integer : adj[x]) {
-            if (integer == par) continue;
+    static void pro() {
+        Deque<Integer> queue = new LinkedList<>();
+        // 제일 앞에 "정렬될 수 있는" 정점 찾기
+        for (int i = 1; i <= N; i++)
+            if (indeg[i] == 0) {
+                queue.add(i);
+                T_done[i] = T[i];
+            }
 
-            dfs(integer, x);
+        // 위상 정렬 순서대로 T_done 계산을 함께 해주기
+        while (!queue.isEmpty()) {
+            int x = queue.poll();
+            for (int y : adj[x]) {
+                indeg[y]--;
+                if (indeg[y] == 0) queue.add(y);
+                /**
+                 * 큐에 넣는 거랑은 별개
+                 * */
+                T_done[y] = Math.max(T_done[y], T_done[x] + T[y]);
+            }
         }
+        int W = scan.nextInt();
+        System.out.println(T_done[W]);
     }
 
     public static void main(String[] args) {
-        input();
-        dfs(1, -1);
-
-        for (int i = 2; i <= N; i++) {
-            sb.append(parents[i]).append('\n');
+        int Q = scan.nextInt();
+        while (Q > 0) {
+            Q--;
+            input();
+            pro();
         }
-        System.out.println(sb);
     }
 
 
