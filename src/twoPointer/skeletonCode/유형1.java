@@ -17,7 +17,7 @@ public class 유형1 {
     static int[] a = new int[N +1];
 
     static void twoPointer() {
-        int R = 0; int ans = 0;
+        int R = 1; int ans = 0;
 
         for (int L = 1; L <= N; L++) {
 

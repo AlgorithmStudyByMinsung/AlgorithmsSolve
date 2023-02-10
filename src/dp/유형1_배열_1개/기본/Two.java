@@ -1,50 +1,37 @@
-package dp.two;
-// https://www.acmicpc.net/problem/11057
+package dp.유형1_배열_1개.기본;
+// https://www.acmicpc.net/problem/11726
 import java.io.*;
-import java.util.StringTokenizer;
-/**
- * 정답은 문제를 10007로 나눈 값을 원한다.
- * 난 정답을 구하고 10007로 나눴지만
- * d 배열에 10007 로 나눈 값을 저장 했어야 했고
- * 그래야 integer 범위로 풀 수 있다.
- * */
-public class Four_my {
+import java.util.*;
+
+public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
     static int N;
-    static int ans;
-    static int d[][];
+    static int[] Dy;
 
-
-    static void input() {
+    static void input(){
         N = scan.nextInt();
-        d = new int [1001][10];
-        for (int i = 0; i < 10; i++) {
-            d[1][i] = 1;
-        }
     }
 
     static void pro() {
-        for (int i = 2; i <=1000 ; i++) {
-            for (int j = 0; j <10 ; j++) {
-                for (int k = 0; k <= j; k++) {
-                    d[i][j] += d[i -1][k];
-                }
-                d[i][j] %= 10007;
-            }
+        Dy = new int[1005];
+        // 초기값 구하기
+        Dy[1] = 1;
+        Dy[2] = 2;
+        /**
+         * 정답을 나눈 값으로 출력한다! 다하고 나누는 게 아님
+         **/
+        // 점화식을 토대로 Dy 배열 채우기
+        for (int i = 3; i <= N; i++){
+            Dy[i] = (Dy[i - 1] + Dy[i - 2]) % 10007;
         }
-        for (int i = 0; i < 10; i++) {
-            ans += d[N][i];
-        }
-        System.out.println(ans % 10007);
+        System.out.println(Dy[N]);
     }
 
     public static void main(String[] args) {
         input();
         pro();
-
     }
 
 

@@ -1,64 +1,38 @@
-package dp.four;
-// https://www.acmicpc.net/problem/15681
+package dp.유형1_배열_1개.기본;
+
 import java.io.*;
-import java.util.*;
-/**
- * 트리를 이용한 dp
- *
- * 트리는 dps 를 이용
- * */
-public class One {
+import java.util.StringTokenizer;
+
+public class One_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-    static int N, R, Q;
-    static ArrayList<Integer>[] con;
-    static int[] Dy;
 
-    static void input(){
+    static int N;
+    static int T;
+    static int[] d;
+
+    static void input() {
         N = scan.nextInt();
-        R = scan.nextInt();
-        Q = scan.nextInt();
-        con = new ArrayList[N + 1];
-        for (int i = 1; i <= N; i++){
-            con[i] = new ArrayList<>();
-        }
-        for (int i = 1; i < N; i++){
-            int x = scan.nextInt(), y = scan.nextInt();
-            con[x].add(y);
-            con[y].add(x);
-        }
+        d = new int[N +1];
+
+        d[1] = 1; d[2] = 2; d[3] = 4;
     }
-
-    // Dy[x] 를 계산하는 함수
-    static void dfs(int x, int prev){
-        /**
-         * 이렇게 하면 마지막 자식은 1이 된다.
-         * */
-        Dy[x] = 1;
-
-        for (int y: con[x]){
-            if (y == prev) continue;
-            dfs(y, x);
-            Dy[x] += Dy[y];
-        }
-    }
-
     static void pro() {
-        Dy = new int[N + 1];
-
-        dfs(R, -1);
-
-        for (int i = 1; i <= Q; i++){
-            int q = scan.nextInt();
-            sb.append(Dy[q]).append('\n');
+        for (int i = 4; i <= N ; i++) {
+            d[i] = (d[i -1] + d[i -2] + d[i -3]);
         }
-        System.out.println(sb);
+        sb.append(d[N]).append('\n');
     }
 
     public static void main(String[] args) {
-        input();
-        pro();
+        T = scan.nextInt();
+
+        for (int i = 0; i < T; i++) {
+            input();
+            pro();
+        }
+        System.out.println(sb);
     }
 
 

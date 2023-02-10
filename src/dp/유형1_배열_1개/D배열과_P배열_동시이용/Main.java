@@ -1,60 +1,32 @@
-package dp.four;
-// https://www.acmicpc.net/problem/1949
+package dp.유형1_배열_1개.D배열과_P배열_동시이용;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.util.*;
-/**
- * 트리와 dp
- * 유형: dp 의 2번 유형
- * j 에 조건을 쓰는 유형
- *
- *
- * */
+import java.util.StringTokenizer;
+// https://www.acmicpc.net/problem/11052
 public class Main {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+
     static int N;
-    static int[] num;
-    static ArrayList<Integer>[] con;
-    static int[][] Dy;
+    static int[] p;
+    static int[] d;
 
-    static void input(){
+    static void input() {
         N = scan.nextInt();
-        num = new int[N + 1];
-        con = new ArrayList[N + 1];
-        for (int i = 1; i <= N; i++){
-            num[i] = scan.nextInt();
-            con[i] = new ArrayList<>();
-        }
-        for (int i = 1; i < N; i++){
-            int x = scan.nextInt(), y = scan.nextInt();
-            con[x].add(y);
-            con[y].add(x);
-        }
-    }
+        p = new int[N +1];
+        d = new int[N +1];
 
-    static void dfs(int x, int prev){
-        /**
-         * 처음에 이걸 쓰면 마지막에는 이것만 추가되고
-         * 말단 노드가 아니면 여기에 추가가 된다.
-         * */
-        Dy[x][1] = num[x];
-        for (int y: con[x]){
-            if (y == prev) continue;
-            dfs(y, x);
-            Dy[x][0] += Math.max(Dy[y][0], Dy[y][1]);
-            Dy[x][1] += Dy[y][0];
-        }
+        for (int i = 1; i <= N ; i++) p[i] = scan.nextInt();
     }
 
     static void pro() {
-        Dy = new int[N + 1][2];
-
-        dfs(1, -1);
-
-        System.out.println(Math.max(Dy[1][0], Dy[1][1]));
+        for (int i = 1; i <= N ; i++) {
+            for (int j = 0; j < i; j++) {
+                d[i] = Math.max(d[i] , d[j] + p[i -j]);
+            }
+        }
+        System.out.println(d[N]);
     }
 
     public static void main(String[] args) {

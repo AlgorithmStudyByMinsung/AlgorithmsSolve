@@ -1,38 +1,75 @@
-package dp.one;
-
+package codingTest.one;
+// 부분만 맞음
 import java.io.*;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class One_my {
+public class 골목대장호석 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+    static class Edge {
+        public int to;
+        public int weight;
+
+        public Edge(int to, int weight) {
+            this.to = to;
+            this.weight = weight;
+        }
+    }
 
     static int N;
-    static int T;
+    static int M;
+    static int A;
+    static int B;
+    static int C;
+    static ArrayList<Edge>[] adj;
     static int[] d;
+
 
     static void input() {
         N = scan.nextInt();
-        d = new int[N +1];
+        M = scan.nextInt();
+        A = scan.nextInt();
+        B = scan.nextInt();
+        C = scan.nextInt();
 
-        d[1] = 1; d[2] = 2; d[3] = 4;
-    }
-    static void pro() {
-        for (int i = 4; i <= N ; i++) {
-            d[i] = (d[i -1] + d[i -2] + d[i -3]);
+        adj = new ArrayList[N + 1];
+        for (int i = 1; i <= N ; i++) adj[i] = new ArrayList<>();
+        d = new int[N + 1];
+
+        for (int i = 1; i <= N ; i++) {
+            d[i] = -1;
         }
-        sb.append(d[N]).append('\n');
+
+        for (int i = 0; i < M; i++) {
+            int from = scan.nextInt();
+            int to = scan.nextInt();
+            int weight = scan.nextInt();
+
+            adj[from].add(new Edge(to , weight));
+        }
+    }
+
+    static void dfs (int x, int money) {
+        ArrayList<Edge> edges = adj[x];
+        for (Edge edge : edges) {
+            if (money - edge.weight < 0) continue;
+
+            if (d[edge.to] != -1) {
+                d[edge.to] = Math.min(d[edge.to], Math.max(d[x], edge.weight));
+            } else {
+                d[edge.to] = Math.max(edge.weight , d[x]);
+            }
+
+            dfs(edge.to , money - edge.weight);
+        }
     }
 
     public static void main(String[] args) {
-        T = scan.nextInt();
-
-        for (int i = 0; i < T; i++) {
-            input();
-            pro();
-        }
-        System.out.println(sb);
+        input();
+        dfs(A , C);
+        System.out.println(d[B]);
     }
 
 

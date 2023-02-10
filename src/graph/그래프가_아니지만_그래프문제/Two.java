@@ -1,7 +1,7 @@
 package graph.그래프가_아니지만_그래프문제;
 import java.io.*;
 import java.util.*;
-
+// https://www.acmicpc.net/problem/2667
 public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();

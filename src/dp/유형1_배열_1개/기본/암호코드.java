@@ -1,47 +1,51 @@
-package dp.one;
-// https://www.acmicpc.net/problem/9095
+package dp.유형1_배열_1개.기본;
+// https://www.acmicpc.net/problem/2011
 import java.io.*;
-import java.util.*;
-
-public class One {
+import java.util.StringTokenizer;
+/**
+ * dp 는 쉬운데 안되는 조건이 많아서 맞왜틀 유발!!
+ * */
+public class 암호코드 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-    static int[] Dy;
 
-    /**
-     * test Case 문제는 미리 만들어 놓고 해야한다.
-     * */
-    static void preprocess(){
-        /**
-         * dp는 이걸 만들어야 한다.
-         * */
-        Dy = new int[12];
-        // 초기값 구하기
-        Dy[1] = 1;
-        Dy[2] = 2;
-        Dy[3] = 4;
+    static String a;
+    static int[] d;
 
-        // 점화식을 토대로 Dy 배열 채우기
-        for (int i = 4; i <= 11; i++){
-            Dy[i] = Dy[i - 1] + Dy[i - 2] + Dy[i - 3];
-        }
+    static void input() {
+        a = scan.nextLine();
+        d = new int[a.length() +1];
     }
 
-    /**
-     * 미리 만들어 놓고 할 수 있음 만들어 놓자
-     **/
     static void pro() {
-        int T = scan.nextInt();
-        for (int tt = 1; tt <= T; tt++){
-            int N = scan.nextInt();
-            sb.append(Dy[N]).append('\n');
+        if (a.charAt(0) <= 48) {
+            System.out.println(0);
+            return;
         }
-        System.out.print(sb);
+        d[0] = 1;
+        d[1] = 1;
+
+        for (int i = 2; i <= a.length() ; i++) {
+            if (a.charAt(i -1) != 48) {
+                d[i] += d[i -1];
+            }
+
+            if (Integer.parseInt(a.substring(i - 2 ,i)) <= 26 && Integer.parseInt(a.substring(i - 2 ,i)) >= 10) {
+                d[i] += d[i -2];
+            }
+            if (d[i] == 0) {
+                System.out.println(0);
+                return;
+            }
+            d[i] %= 1000000;
+        }
+
+        System.out.println(d[a.length()]);
     }
 
     public static void main(String[] args) {
-        preprocess();
+        input();
         pro();
     }
 

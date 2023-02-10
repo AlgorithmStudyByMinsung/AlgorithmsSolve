@@ -1,49 +1,46 @@
-package twoPointer;
-// https://www.acmicpc.net/problem/1253
+package dp.유형2_배열_2개.마지막_상태를_기록;
+// https://www.acmicpc.net/problem/2156
 import java.io.*;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Four {
+public class 포도주시식 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+
     static int N;
-    static int[] A;
+    static int[] a;
+    static int[][] d;
 
     static void input() {
         N = scan.nextInt();
-        A = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            A[i] = scan.nextInt();
-        }
-    }
 
-    // target_idx 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
-    static boolean func(int target_idx) {
-        int L = 1, R = N;
-        int target = A[target_idx];
-        while (L < R) {
-            if (L == target_idx) L++;
-            else if (R == target_idx) R--;
-            else {
-                if (A[L] + A[R] > target) R--;
-                else if (A[L] + A[R] == target) return true;
-                else L++;
-            }
-        }
-        return false;
+        a = new int[N +1];
+        d = new int[N +1][3];
+
+        for (int i = 1; i <= N ; i++) a[i] = scan.nextInt();
     }
 
     static void pro() {
-        // 최소, 최대를 빠르게 알기 위한 정렬
-        Arrays.sort(A, 1, N + 1);
+        d[1][0] = 0;
+        d[1][1] = a[1];
 
-        int ans = 0;
-        for (int i = 1; i <= N; i++) {
-            // i 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
-            if (func(i)) ans++;
+        for (int i = 2; i <= N ; i++) {
+            d[i][2] = d[i -1][1] + a[i];
+            d[i][1] = d[i -1][0] + a[i];
+
+            int max = 0;
+            for (int j = 0; j < 3; j++) {
+                max = Math.max(max, d[i -1][j]);
+            }
+
+            d[i][0] = max;
         }
+        int ans = 0;
+        for (int i = 0; i < 3; i++) {
+            ans = Math.max(ans, d[N][i]);
+        }
+
         System.out.println(ans);
     }
 

@@ -1,49 +1,46 @@
-package twoPointer;
-// https://www.acmicpc.net/problem/1253
+package dp.유형2_배열_2개.마지막_상태를_기록;
+// http://boj.kr/2579
 import java.io.*;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Four {
+public class Three_my {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-    static int N;
-    static int[] A;
 
+    static int N;
+    static int[] a;
+    static int[][] d;
     static void input() {
         N = scan.nextInt();
-        A = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            A[i] = scan.nextInt();
-        }
-    }
+        a = new int[N +1];
+        d = new int[N +1][N +1];
 
-    // target_idx 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
-    static boolean func(int target_idx) {
-        int L = 1, R = N;
-        int target = A[target_idx];
-        while (L < R) {
-            if (L == target_idx) L++;
-            else if (R == target_idx) R--;
-            else {
-                if (A[L] + A[R] > target) R--;
-                else if (A[L] + A[R] == target) return true;
-                else L++;
-            }
-        }
-        return false;
+        for (int i = 1; i <= N; i++) a[i] = scan.nextInt();
     }
 
     static void pro() {
-        // 최소, 최대를 빠르게 알기 위한 정렬
-        Arrays.sort(A, 1, N + 1);
-
-        int ans = 0;
-        for (int i = 1; i <= N; i++) {
-            // i 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
-            if (func(i)) ans++;
+        /**
+         * 예외 처리를 안하면 인덱스 out 예외 가 터진다.
+         * */
+        if (N <3)  {
+            if (N == 1) System.out.println(a[1]);
+            if (N == 2) System.out.println(a[2] + a[1]);
+            return;
         }
+
+        d[1][1] = a[1];
+        d[1][2] = -1;
+
+        d[2][1] = a[2];
+        d[2][2] = a[2] + a[1];
+
+        for (int i = 3; i <= N ; i++) {
+            d[i][1] = Math.max(d[i -2][1], d[i -2][2]) + a[i];
+
+            d[i][2] = d[i -1][1] + a[i];
+        }
+        int ans = Math.max(d[N][1], d[N][2]);
         System.out.println(ans);
     }
 

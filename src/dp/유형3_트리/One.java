@@ -1,75 +1,64 @@
-package parametricSearch;
-
+package dp.유형3_트리;
+// https://www.acmicpc.net/problem/15681
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
-
-public class Main {
+import java.util.*;
+/**
+ * 트리를 이용한 dp
+ *
+ * 트리는 dps 를 이용
+ * */
+public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+    static int N, R, Q;
+    static ArrayList<Integer>[] con;
+    static int[] Dy;
 
-    static int N;
-    static int C;
-    static int[] a;
-    static int ans;
-
-    static void input() {
+    static void input(){
         N = scan.nextInt();
-        C = scan.nextInt();
-        a = new int[N +1];
-
-        for (int i = 1; i <= N ; i++) {
-            a[i] = scan.nextInt();
+        R = scan.nextInt();
+        Q = scan.nextInt();
+        con = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++){
+            con[i] = new ArrayList<>();
+        }
+        for (int i = 1; i < N; i++){
+            int x = scan.nextInt(), y = scan.nextInt();
+            con[x].add(y);
+            con[y].add(x);
         }
     }
 
-    static boolean greedy(int x) {
-        // a 배열을 for 문을 돌면서
-        // 1부터 시작
-        // current 변수 필요
-        // 횟수 변수 필요 C 에 도달하면 종료
-        // 다 돌았는데 C 보다 작으면 false 를 리턴
+    // Dy[x] 를 계산하는 함수
+    static void dfs(int x, int prev){
+        /**
+         * 이렇게 하면 마지막 자식은 1이 된다.
+         * */
+        Dy[x] = 1;
 
-        int current = a[1];
-//        int current = 1; --> 처음에 이렇게 해서 틀렸었음!!
-        int cnt = 1;
-
-        for (int i = 2; i <=N ; i++) {
-            if (a[i] >= x + current) {
-                current = a[i];
-                cnt +=1;
-
-                if (cnt == C) return true;
-            }
+        for (int y: con[x]){
+            if (y == prev) continue;
+            dfs(y, x);
+            Dy[x] += Dy[y];
         }
-        return false;
     }
 
-    static void parametricSearch(){
-        int L = 1;
-        int R = a[a.length -1] -1;
-        int res = 0;
+    static void pro() {
+        Dy = new int[N + 1];
 
-        while (L <= R) {
-            int mid = (L + R)/2;
+        dfs(R, -1);
 
-            if (greedy(mid)) {
-                res = mid;
-                L = mid+1;
-            }else {
-                R = mid -1;
-            }
+        for (int i = 1; i <= Q; i++){
+            int q = scan.nextInt();
+            sb.append(Dy[q]).append('\n');
         }
-        System.out.println(res);
+        System.out.println(sb);
     }
 
     public static void main(String[] args) {
         input();
-        Arrays.sort(a, 1, N+1);
-
-        parametricSearch();
-
+        pro();
     }
 
 

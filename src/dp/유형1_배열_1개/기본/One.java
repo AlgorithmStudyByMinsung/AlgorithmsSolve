@@ -1,11 +1,5 @@
-package dp.three;
-// https://www.acmicpc.net/problem/11066
-/**
- * DP 의 3번 째 유형 : 구간
- *
- * 가장 작은 값을 제일 작은 구간으로 지정
- * d[i][j]  를 i ~ j 까지로 한다.
- * */
+package dp.유형1_배열_1개.기본;
+// https://www.acmicpc.net/problem/9095
 import java.io.*;
 import java.util.*;
 
@@ -13,56 +7,42 @@ public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-    static int K, Q;
-    static int[] num;
-    static int[][] Dy, sum;
+    static int[] Dy;
 
-    static void input(){
-        K = scan.nextInt();
-        num = new int[K + 1];
-        sum = new int[K + 1][K + 1];
-        for (int i = 1; i <= K; i++){
-            num[i] = scan.nextInt();
-        }
-    }
-
+    /**
+     * test Case 문제는 미리 만들수 있다면 하면 좋다
+     * */
     static void preprocess(){
-        // 문제의 특성상 전처리 과정
-        for (int i = 1; i <= K; i++){
-            for (int j = i; j <= K; j++){
-                sum[i][j] = sum[i][j - 1] + num[j];
-            }
+        /**
+         * dp는 이걸 만들어야 한다.
+         * */
+        Dy = new int[12];
+        // 초기값 구하기
+        Dy[1] = 1;
+        Dy[2] = 2;
+        Dy[3] = 4;
+
+        // 점화식을 토대로 Dy 배열 채우기
+        for (int i = 4; i <= 11; i++){
+            Dy[i] = Dy[i - 1] + Dy[i - 2] + Dy[i - 3];
         }
     }
 
+    /**
+     * 미리 만들어 놓고 할 수 있음 만들어 놓자
+     **/
     static void pro() {
-        preprocess();
-        // i == j 일 때 d[i][j] 는 0으로 설정!
-        Dy = new int[K + 1][K + 1];
-
-        for (int len = 2; len <= K; len ++){
-            for (int i = 1; i <= K - len + 1; i++){
-                /**
-                 * j 를 for 문으로 돌리는 것이 아니다!
-                 * */
-                int j = i + len - 1;
-
-                Dy[i][j] = Integer.MAX_VALUE;
-                for (int k = i; k < j; k++){
-                    Dy[i][j] = Math.min(Dy[i][j], Dy[i][k] + Dy[k + 1][j] + sum[i][j]);
-                }
-            }
+        int T = scan.nextInt();
+        for (int tt = 1; tt <= T; tt++){
+            int N = scan.nextInt();
+            sb.append(Dy[N]).append('\n');
         }
-
-        System.out.println(Dy[1][K]);
+        System.out.print(sb);
     }
 
     public static void main(String[] args) {
-        Q = scan.nextInt();
-        for (int rep = 1; rep<=Q;rep++) {
-            input();
-            pro();
-        }
+        preprocess();
+        pro();
     }
 
 

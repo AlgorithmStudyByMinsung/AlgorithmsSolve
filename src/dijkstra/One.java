@@ -1,5 +1,5 @@
 package dijkstra;
-
+// https://www.acmicpc.net/problem/1916
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  *
  * 가중치가 1이냐 아니냐 --> 나뉨
  * */
-public class Main {
+public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 

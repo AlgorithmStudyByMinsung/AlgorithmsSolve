@@ -1,46 +1,46 @@
-package dp.two;
-// http://boj.kr/2579
-import java.io.*;
-import java.util.StringTokenizer;
+package dp.유형2_배열_2개.마지막_상태를_기록;
 
-public class Three_my {
+import java.io.*;
+import java.util.*;
+
+public class Four {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
     static int N;
-    static int[] a;
-    static int[][] d;
+    static int[][] Dy;
+    static int[] A;
+
     static void input() {
         N = scan.nextInt();
-        a = new int[N +1];
-        d = new int[N +1][N +1];
-
-        for (int i = 1; i <= N; i++) a[i] = scan.nextInt();
+        A = new int[N + 1];
+        Dy = new int[N + 1][10];
     }
 
     static void pro() {
-        /**
-         * 예외 처리를 안하면 인덱스 out 예외 가 터진다.
-         * */
-        if (N <3)  {
-            if (N == 1) System.out.println(a[1]);
-            if (N == 2) System.out.println(a[2] + a[1]);
-            return;
+        // 초기값 구하기
+        for (int num = 0; num <= 9; num++) {
+            Dy[1][num] = 1;
         }
 
-        d[1][1] = a[1];
-        d[1][2] = -1;
-
-        d[2][1] = a[2];
-        d[2][2] = a[2] + a[1];
-
-        for (int i = 3; i <= N ; i++) {
-            d[i][1] = Math.max(d[i -2][1], d[i -2][2]) + a[i];
-
-            d[i][2] = d[i -1][1] + a[i];
+        // 점화식을 토대로 Dy 배열 채우기
+        for (int len = 2; len <= N; len++) {
+            for (int num = 0; num <= 9; num++) {
+                // 길이가 len이고 num으로 끝나는 개수를 계산하자 == Dy[len][num] 을 계산하자.
+                for (int prev = 0; prev <= num; prev++) {
+                    Dy[len][num] += Dy[len - 1][prev];
+                    Dy[len][num] %= 10007;
+                }
+            }
         }
-        int ans = Math.max(d[N][1], d[N][2]);
+
+        // Dy배열로 정답 계산하기
+        int ans = 0;
+        for (int num = 0; num <= 9; num++) {
+            ans += Dy[N][num];
+            ans %= 10007;
+        }
+
         System.out.println(ans);
     }
 

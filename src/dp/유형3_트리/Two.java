@@ -1,50 +1,61 @@
-package twoPointer;
-// https://www.acmicpc.net/problem/1253
-import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+package dp.유형3_트리;
+// https://www.acmicpc.net/problem/1949
 
-public class Four {
+import java.io.*;
+import java.util.*;
+/**
+ * 트리와 dp
+ * 유형: dp 의 2번 유형
+ * j 에 조건을 쓰는 유형
+ *
+ *
+ * */
+public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
     static int N;
-    static int[] A;
+    static int[] num;
+    static ArrayList<Integer>[] con;
+    static int[][] Dy;
 
-    static void input() {
+    static void input(){
         N = scan.nextInt();
-        A = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            A[i] = scan.nextInt();
+        num = new int[N + 1];
+        con = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++){
+            num[i] = scan.nextInt();
+            con[i] = new ArrayList<>();
+        }
+        for (int i = 1; i < N; i++){
+            int x = scan.nextInt(), y = scan.nextInt();
+            con[x].add(y);
+            con[y].add(x);
         }
     }
 
-    // target_idx 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
-    static boolean func(int target_idx) {
-        int L = 1, R = N;
-        int target = A[target_idx];
-        while (L < R) {
-            if (L == target_idx) L++;
-            else if (R == target_idx) R--;
-            else {
-                if (A[L] + A[R] > target) R--;
-                else if (A[L] + A[R] == target) return true;
-                else L++;
-            }
+    static void dfs(int x, int prev){
+        /**
+         * 처음에 이걸 쓰면 마지막에는 이것만 추가되고
+         * 말단 노드가 아니면 여기에 추가가 된다.
+         * */
+        Dy[x][1] = num[x];
+        for (int y: con[x]){
+            if (y == prev) continue;
+
+            dfs(y, x);
+
+            Dy[x][0] += Math.max(Dy[y][0], Dy[y][1]);
+            Dy[x][1] += Dy[y][0];
         }
-        return false;
     }
 
     static void pro() {
-        // 최소, 최대를 빠르게 알기 위한 정렬
-        Arrays.sort(A, 1, N + 1);
+        Dy = new int[N + 1][2];
 
-        int ans = 0;
-        for (int i = 1; i <= N; i++) {
-            // i 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
-            if (func(i)) ans++;
-        }
-        System.out.println(ans);
+        dfs(1, -1);
+
+        System.out.println(Math.max(Dy[1][0], Dy[1][1]));
     }
 
     public static void main(String[] args) {

@@ -1,52 +1,78 @@
-package dp.two;
-
+package parametricSearch;
+// https://www.acmicpc.net/problem/2110
 import java.io.*;
-import java.util.*;
-
-public class Four {
+import java.util.Arrays;
+import java.util.StringTokenizer;
+/**
+ * 1. 정렬이 가능한가?
+ * 2. 정답의 범위를 log 를 씌우면 정답이 나오나
+ **/
+public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+
     static int N;
-    static int[][] Dy;
-    static int[] A;
+    static int C;
+    static int[] a;
+    static int ans;
 
     static void input() {
         N = scan.nextInt();
-        A = new int[N + 1];
-        Dy = new int[N + 1][10];
+        C = scan.nextInt();
+        a = new int[N +1];
+
+        for (int i = 1; i <= N ; i++) {
+            a[i] = scan.nextInt();
+        }
     }
 
-    static void pro() {
-        // 초기값 구하기
-        for (int num = 0; num <= 9; num++) {
-            Dy[1][num] = 1;
-        }
+    static boolean greedy(int x) {
+        // a 배열을 for 문을 돌면서
+        // 1부터 시작
+        // current 변수 필요
+        // 횟수 변수 필요 C 에 도달하면 종료
+        // 다 돌았는데 C 보다 작으면 false 를 리턴
 
-        // 점화식을 토대로 Dy 배열 채우기
-        for (int len = 2; len <= N; len++) {
-            for (int num = 0; num <= 9; num++) {
-                // 길이가 len이고 num으로 끝나는 개수를 계산하자 == Dy[len][num] 을 계산하자.
-                for (int prev = 0; prev <= num; prev++) {
-                    Dy[len][num] += Dy[len - 1][prev];
-                    Dy[len][num] %= 10007;
-                }
+        int current = a[1];
+//        int current = 1; --> 처음에 이렇게 해서 틀렸었음!!
+        int cnt = 1;
+
+        for (int i = 2; i <=N ; i++) {
+            if (a[i] >= x + current) {
+                current = a[i];
+                cnt +=1;
+
+                if (cnt == C) return true;
             }
         }
+        return false;
+    }
 
-        // Dy배열로 정답 계산하기
-        int ans = 0;
-        for (int num = 0; num <= 9; num++) {
-            ans += Dy[N][num];
-            ans %= 10007;
+    static void parametricSearch(){
+        int L = 1;
+        int R = a[a.length -1] -1;
+        int res = 0;
+
+        while (L <= R) {
+            int mid = (L + R)/2;
+
+            if (greedy(mid)) {
+                res = mid;
+                L = mid+1;
+            }else {
+                R = mid -1;
+            }
         }
-
-        System.out.println(ans);
+        System.out.println(res);
     }
 
     public static void main(String[] args) {
         input();
-        pro();
+        Arrays.sort(a, 1, N+1);
+
+        parametricSearch();
+
     }
 
 

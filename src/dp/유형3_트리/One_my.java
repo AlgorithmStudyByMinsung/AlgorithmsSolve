@@ -1,4 +1,4 @@
-package dp.four;
+package dp.유형3_트리;
 
 import java.io.*;
 import java.util.ArrayList;

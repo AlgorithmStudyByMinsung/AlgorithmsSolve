@@ -1,50 +1,74 @@
-package twoPointer;
-// https://www.acmicpc.net/problem/1253
+package PhaseAlignment;
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
-
-public class Four {
+import java.util.*;
+// https://www.acmicpc.net/problem/2623
+/**
+ * 보면 순서 문제
+ * 키워드 : 순서!!
+ *
+ * inDegree 가 중요
+ *
+ * 들어오는 차수가 없다면 그게 1순위!
+ **/
+public class Three {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
     static int N;
-    static int[] A;
+    static int M;
+    static ArrayList<Integer>[] adj;
+    static int[] inDegree;
 
     static void input() {
         N = scan.nextInt();
-        A = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            A[i] = scan.nextInt();
-        }
-    }
+        M = scan.nextInt();
 
-    // target_idx 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
-    static boolean func(int target_idx) {
-        int L = 1, R = N;
-        int target = A[target_idx];
-        while (L < R) {
-            if (L == target_idx) L++;
-            else if (R == target_idx) R--;
-            else {
-                if (A[L] + A[R] > target) R--;
-                else if (A[L] + A[R] == target) return true;
-                else L++;
+        adj = new ArrayList[N +1];
+        inDegree = new int[N +1];
+        for (int i = 1; i <= N ; i++) adj[i] = new ArrayList<>();
+
+        for (int i = 0; i < M; i++) {
+            int T = scan.nextInt();
+
+            int[] a = new int[T];
+
+            for (int j = 0; j < T; j++) {
+                a[j] = scan.nextInt();
+            }
+
+            for (int j = 0; j < T -1; j++) {
+                for (int k = j +1; k < T ; k++) {
+                    adj[a[j]].add(a[k]);
+                    inDegree[a[k]] ++;
+                }
             }
         }
-        return false;
     }
 
     static void pro() {
-        // 최소, 최대를 빠르게 알기 위한 정렬
-        Arrays.sort(A, 1, N + 1);
+        int cnt = 0;
 
-        int ans = 0;
-        for (int i = 1; i <= N; i++) {
-            // i 번째 원소가 서로 다른 두 수의 합으로 표현이 되는가?
-            if (func(i)) ans++;
+        Deque<Integer> queue = new LinkedList<>();
+
+        for (int i = 1; i <= N ; i++) {
+            if (inDegree[i] == 0) {
+                queue.add(i);
+            }
         }
-        System.out.println(ans);
+
+        while (! queue.isEmpty()) {
+            Integer x = queue.poll();
+            cnt ++;
+            sb.append(x).append('\n');
+
+            for (Integer y : adj[x]) {
+                inDegree[y] --;
+
+                if (inDegree[y] == 0) queue.add(y);
+            }
+        }
+        if (cnt == N) System.out.println(sb);
+        else System.out.println(0);
     }
 
     public static void main(String[] args) {
