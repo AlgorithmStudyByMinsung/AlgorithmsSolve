@@ -1,53 +1,61 @@
-package codingTest.one;
-// https://www.acmicpc.net/problem/20181
-// 시간 초과
-// 시간 : 30분
-// 2^100000000 에서 줄어든다해도 1초이하가 걸리지 않는다.
+package facemTest.my;
+// https://www.acmicpc.net/problem/21921
+// 33분 소요
+// twoPointer 문제
+// 시간복잡도를 잘못 계산
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class 꿈틀꿈틀_호석_애벌래 {
+public class 블로그_4번문제 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-    static int K;
+    static int X;
     static int[] a;
 
     static void input() {
         N = scan.nextInt();
-        K = scan.nextInt();
+        X = scan.nextInt();
 
         a = new int[N + 1];
 
         for (int i = 1; i <= N ; i++) a[i] = scan.nextInt();
     }
-    static int max = Integer.MIN_VALUE;
-    static void pro(int x, int sum){
-        if (x == N + 1) {
-            max = Math.max(max, sum);
-            return;
+
+    static void twoPointer(int k) {
+        int R = 1;
+        int sum = 0; int Max = Integer.MIN_VALUE;
+        int cnt = 0; int l = 1;
+
+        for (int L = 1; L <= N - k + 1; L++) {
+            sum -= a[L - 1];
+            l --;
+
+            while (l < k) {
+                sum += a[R];
+                R ++; l ++;
+            }
+
+            if (sum > Max) {
+                Max = sum;
+                cnt = 1;
+            } else if (sum == Max) {
+                cnt ++;
+            }
         }
-        int s = 0;
-        int R = x;
-
-        while (R >= 1 && R <= N && s < K) {
-            s += a[R];
-            R ++;
+        if (Max == 0) {
+            System.out.println("SAD");
+            System.out.close();
         }
-
-        int b = s - K;
-
-        pro(R , sum + b);
-        pro(x + 1, sum);
+        System.out.println(Max);
+        System.out.println(cnt);
     }
 
     public static void main(String[] args) {
         input();
-
-        pro(1, 0);
-        System.out.println(max);
+        twoPointer(X);
     }
 
 

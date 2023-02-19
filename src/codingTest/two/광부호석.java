@@ -1,5 +1,5 @@
 package codingTest.two;
-// https://fastcampus.co.kr/courses/203934/clips/
+// https://www.acmicpc.net/problem/21279
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
  * 그리고 돌 때마다 한줄씩 확인을 해줘야 하는데 이건 다 합쳐서 o(N) 이다.
  * 그래서 O(X + Y) + o(N) 이다.
  * */
+// 아직 답변 못들음
 public class 광부호석 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();

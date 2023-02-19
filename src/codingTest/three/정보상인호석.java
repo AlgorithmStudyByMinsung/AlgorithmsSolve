@@ -5,7 +5,7 @@ package codingTest.three;
  * */
 import java.io.*;
 import java.util.*;
-
+// https://www.acmicpc.net/problem/22252
 public class 정보상인호석 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();

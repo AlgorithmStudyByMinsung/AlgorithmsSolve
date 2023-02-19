@@ -1,8 +1,14 @@
 package codingTest.threeAnswer;
+// https://www.acmicpc.net/problem/22255
 
 import java.io.*;
 import java.util.*;
-
+/**
+ * 다익스트라(상태 와 가중치를 같이 적용)
+ * 몇 번에 갔는 지가 중요한게 아니라 몇번에 갔든 상관없이 가중치가 중요한 것이다.
+ * 그래서 3k 번에 도착했을 때 3k + 1 번 , 3k + 2번 에 도착했을 경우의 최소 충격치를 구해야한다.
+ * 
+ * */
 public class 호석사우르스 {
     static PrintWriter out = new PrintWriter(System.out);
 

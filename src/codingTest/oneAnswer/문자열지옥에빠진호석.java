@@ -2,7 +2,7 @@ package codingTest.oneAnswer;
 
 import java.io.*;
 import java.util.*;
-
+// https://www.acmicpc.net/problem/20166
 public class 문자열지옥에빠진호석 {
     static int n, m, k;
     static String[] board;

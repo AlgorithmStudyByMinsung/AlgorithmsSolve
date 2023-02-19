@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 /**
  * 다익스트라는 모든 곳에서의 최단거리가 구해진다.
  * */
+// 아직 답변 못들음
 public class 호석사우르스 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
@@ -59,9 +60,9 @@ public class 호석사우르스 {
     static void dijkstra() {
         PriorityQueue<Info> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.dist));
 
-        queue.add(new Info(1,1, 0));
-        weight[1][1] = 0;
-        d[1][1] = 1;
+        queue.add(new Info(sx,sy, 0));
+        weight[sx][sy] = 0;
+        d[sx][sy] = 1;
 
         while (! queue.isEmpty()) {
             Info x = queue.poll();

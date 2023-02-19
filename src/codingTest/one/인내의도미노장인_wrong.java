@@ -8,7 +8,7 @@ package codingTest.one;
 import java.io.*;
 import java.util.StringTokenizer;
 // https://www.acmicpc.net/problem/20165
-public class 인내의_도미노_장인_호석_my {
+public class 인내의도미노장인_wrong {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 

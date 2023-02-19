@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
  * - 최소 비용으로 풀어서 해당 값보다 작은 지 큰 지 확인이 가능
  * - 특정 값보다 큰게 나오면 continue 를 쓰면 그 경로를 어차피 안감
  * */
+// 아직 답변 못들음
 public class 골목대장호석V2 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();

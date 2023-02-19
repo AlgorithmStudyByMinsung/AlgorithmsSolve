@@ -2,6 +2,7 @@ package codingTest.threeAnswer;
 
 import java.io.*;
 import java.util.*;
+// https://www.acmicpc.net/problem/22251
 
 public class 빌런호석 {
     static FastReader scan = new FastReader();
