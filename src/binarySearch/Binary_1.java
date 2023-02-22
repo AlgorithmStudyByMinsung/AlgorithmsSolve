@@ -4,8 +4,14 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 /**
- * 이분 탐색의 사간복잡도는 N 이다.
+ * 이분 탐색의 사간복잡도는 로그 N 이다.
  * 하지만 정렬이 NLog N 이다.
+ * */
+/**
+ * 근사치를 구하는 문제이다.
+ *
+ * 작거나 같은 근사치를 구한다면 res = L - 1
+ * 크거나 같은 근사치를 구한다면 res = R + 1
  * */
 public class Binary_1 {
     static FastReader scan = new FastReader();

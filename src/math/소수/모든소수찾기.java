@@ -1,58 +1,61 @@
-package facemTest.my;
-// https://www.acmicpc.net/problem/21918
-
+package math.소수;
+// https://www.acmicpc.net/problem/1929
 import java.io.*;
 import java.util.StringTokenizer;
-
-public class 전구_1번문제 {
+/**
+ * 유형 2: 특정 값 이하에서 소수를 전부 구하기
+ * */
+public class 모든소수찾기 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
     static int M;
-    static int[] a;
+    static boolean[] check; // 소수인지 아닌지를 확인하는 배열
 
     static void input() {
-        N = scan.nextInt();
         M = scan.nextInt();
+        N = scan.nextInt();
 
-        a = new int[N + 1];
-
-        for (int i = 1; i <= N ; i++) a[i] = scan.nextInt();
+        check = new boolean[N + 1];
     }
 
-    static void pro (int type, int l , int r) {
-        if (type == 1) {
-            a[l] = r;
-        } else if (type == 2) {
-            for (int i = l; i <=r ; i++) {
-                a[i] = a[i] == 0 ? 1 : 0;
-            }
-        } else if (type == 3) {
-            for (int i = l; i <=r ; i++) {
-                a[i] = 0;
-            }
-        } else {
-            for (int i = l; i <=r ; i++) {
-                a[i] = 1;
+    static void primeCheck() {
+        check[0] = check[1] = true; // 0과 1은 소수가 아니므로 true
+
+        /**
+         * i * i <= N
+         * 이유는 i 까지 왔다는 것은 i 이전 수의 배수들은 모두 지워졌다.
+         * 예를 들어 i 의 2배수 3배수 4배수... 모두 확인을 하였다
+         * 그래서 i * i 가 N 보다 크다면 더 이상 진행을 할 필요가 없다.
+         * */
+        for (int i = 2; i * i <= N; i++) {// 2로 시작해서 2는 무조건 소수임!
+            if (check[i]) continue; // 소수가 아닌것들은 pass
+
+            /**
+             * 여기도 이런식으로 진행
+             * */
+            for (int j = i + i; j <= N; j += i) {
+                check[j] = true;
             }
         }
+    }
+
+    static void pro() {
+        primeCheck();
+
+        for (int i = M; i <= N; i++) {
+            if (check[i]) continue;
+
+            sb.append(i).append('\n');
+        }
+        System.out.println(sb);
     }
 
     public static void main(String[] args) {
         input();
-        for (int i = 0; i < M; i++) {
-            int a = scan.nextInt();
-            int b = scan.nextInt();
-            int c = scan.nextInt();
-
-            pro(a, b, c);
-        }
-        for (int i = 1; i <= N; i++) {
-            sb.append(a[i]).append(' ');
-        }
-        System.out.println(sb);
+        pro();
     }
 
 

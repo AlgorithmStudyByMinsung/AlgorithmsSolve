@@ -1,21 +1,38 @@
+package math.최대공약수;
+/**
+ * 유클리드 호제법을 이용하였다.
+ * */
 import java.io.*;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Form {
+public class Main {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
     static int N;
-
+    static int M;
 
     static void input() {
         N = scan.nextInt();
+        M = scan.nextInt();
     }
+
+    static int gcd(int a, int b) {
+        if (b == 0) return a;
+
+        else return gcd(b, a % b);
+    }
+
+    static int lcm(int a, int b) {
+        return gcd(a, b) * (a / gcd(a, b)) * (b / gcd(a, b));
+    }
+
 
     public static void main(String[] args) {
         input();
+        System.out.println(gcd(N , M));
+        System.out.println(lcm(N , M));
     }
 
 

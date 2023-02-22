@@ -37,11 +37,17 @@ public class Binary_2 {
      * res 나 res -1 를 확인하면 둘 중하나가 근사치
      **/
     static int binarySearch(int[] a, int L, int R, int x) {
+        /**
+         * res 의 초기값 설정이 중요
+         * */
         int res = R +1;
 
         while (L <= R){
             int mid = (L + R)/2;
 
+            /**
+             * 큰것들 중에 근사치를 찾는다 -> 따라서 작은 것중에도 찾아야한다.
+             * */
             if (a[mid] >= x) {
                 res = mid;
                 R = mid -1;

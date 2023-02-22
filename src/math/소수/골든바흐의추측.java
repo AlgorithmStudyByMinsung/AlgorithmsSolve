@@ -1,61 +1,52 @@
-package facemTest.my;
-// https://www.acmicpc.net/problem/21921
-// 33분 소요
-// twoPointer 문제
-// 시간복잡도를 잘못 계산
+package math.소수;
+// https://www.acmicpc.net/problem/6588
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class 블로그_4번문제 {
+public class 골든바흐의추측 {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
 
-    static int N;
-    static int X;
-    static int[] a;
-
+    static int N = -1;
+    static int MOD = 1000000;
+    static boolean[] check = new boolean[MOD + 1];
     static void input() {
         N = scan.nextInt();
-        X = scan.nextInt();
-
-        a = new int[N + 1];
-
-        for (int i = 1; i <= N ; i++) a[i] = scan.nextInt();
     }
+    static void primeCheck() {
+        check[0] = check[1] = true;
 
-    static void twoPointer(int k) {
-        int R = 1;
-        int sum = 0; int Max = Integer.MIN_VALUE;
-        int cnt = 0; int l = 1;
+        for (int i = 2; i * i <= MOD; i++) {
+            if (check[i]) continue;
 
-        for (int L = 1; L <= N - k + 1; L++) {
-            sum -= a[L - 1];
-            l --;
-
-            while (l < k) {
-                sum += a[R];
-                R ++; l ++;
-            }
-
-            if (sum > Max) {
-                Max = sum;
-                cnt = 1;
-            } else if (sum == Max) {
-                cnt ++;
+            for (int j = i + i; j <= MOD; j+= i) {
+                check[j] = true;
             }
         }
-        if (Max == 0) {
-            System.out.println("SAD");
-            System.out.close();
-        }
-        System.out.println(Max);
-        System.out.println(cnt);
     }
 
+    static void pro(int x) {
+
+        for (int i = 3; i <= x; i++) {
+            if (check[i]) continue;
+            if (i%2 == 0) continue;
+
+            if (! check[x - i]) {
+                sb.append(x).append(" = ").append(i).append(" + ").append(x - i).append('\n');
+                break;
+            }
+        }
+    }
     public static void main(String[] args) {
-        input();
-        twoPointer(X);
+        primeCheck();
+
+        while (N != 0) {
+            input();
+
+            pro(N);
+        }
+        System.out.println(sb);
     }
 
 

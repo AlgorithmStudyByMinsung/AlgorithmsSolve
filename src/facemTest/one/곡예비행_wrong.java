@@ -1,4 +1,4 @@
-package facemTest.my;
+package facemTest.one;
 // https://www.acmicpc.net/problem/21923
 import java.io.*;
 import java.util.*;

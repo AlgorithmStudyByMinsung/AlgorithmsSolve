@@ -1,10 +1,8 @@
 package bruteForce.NMAndK;
-
-import java.io.*;
-import java.util.StringTokenizer;
+// https://www.acmicpc.net/problem/18290
 
 import java.util.*;
-public class Main {
+public class NM과K {
     static int[][] a = new int[10][10];
     static boolean[][] c = new boolean[10][10];
     static int n, m, k;
