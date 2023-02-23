@@ -7,6 +7,10 @@ import java.util.StringTokenizer;
 public class Three {
     /**
      * 트리의 특성을 살린 문제
+     *
+     * - 노드가 하나여도 트리이다.
+     * - 간선 = 정점 - 1 하지만 양방향이므로 곱하기 2
+     * - multi dfs 이다. 시작점을 다르게 해서 dfs 를 돌리면 tree 의 갯 수가 나온다.
      * */
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
