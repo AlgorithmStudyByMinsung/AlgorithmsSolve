@@ -5,6 +5,9 @@ import java.util.*;
 /**
  * 에초에 문제가 그래프라고 알려주고 있음
  * */
+/**
+ * 정해진 순서 규칙이 있다 = 위상정렬
+ * */
 public class One {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();

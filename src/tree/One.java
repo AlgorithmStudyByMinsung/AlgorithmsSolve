@@ -13,7 +13,9 @@ import java.util.StringTokenizer;
  *
  * 결론: 트리는 visit 배열 필요가 없고 자식노드만 저장하면 된다.
  * */
-
+/**
+ * 트리의 조상 찾는 문제이다.
+ * */
 /**
  * tree 는 dfs
  * */

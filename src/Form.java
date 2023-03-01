@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class Form {
@@ -8,6 +9,7 @@ public class Form {
 
 
     static int N;
+    static HashMap<String , Integer> v = new HashMap<>();
 
 
     static void input() {

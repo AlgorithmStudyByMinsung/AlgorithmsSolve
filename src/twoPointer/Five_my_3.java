@@ -1,70 +1,64 @@
 package twoPointer;
 
 import java.io.*;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
-public class Four_my {
+// v.get(a.charAt(R)) == null || v.get(a.charAt(R)) == 0
+/**
+ * 해쉬 맵으로 풀 때 0이거나 null 이거나 이렇게 해줘야 갯수 check 가 된다.
+ * */
+
+public class Five_my_3
+{
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-
     static int N;
-    static int[] a;
+    static String a;
+    static HashMap<Character, Integer> v = new HashMap<>();
+
     static void input() {
         N = scan.nextInt();
-        a = new int[N +1];
-
-        for (int i = 1; i <= N ; i++) {
-            a[i] = scan.nextInt();
-        }
+        a = scan.next();
     }
-    static boolean binarySearch(int x , int del) {
-        int L =1; int R = N;
-        int temp = a[del];
-        a[del] = Integer.MAX_VALUE;
 
-        while (L <=R) {
-            int mid = (L +R)/2;
+    static void twoPointer() {
+        int R = 0;
+        int ans = Integer.MIN_VALUE;
+        int cnt = 0;
 
-            if (a[mid] > x) {
-                R -=1;
-            } else if (a[mid] == x) {
-                a[del] = temp;
-                return true;
-            } else {
-                L +=1;
-            }
-        }
-        a[del] = temp;
-        return false;
-    }
-    static void pro() {
-        int ans = 0;
-        for (int i = 1; i <= N ; i++) {
-            int current = a[i];
-            boolean available = false;
+        for(int L = 0; L < a.length(); L ++) {
 
-            for (int j = 1; j <= N ; j++) {
-                int target = a[i] - a[j];
-                if (binarySearch(target, j)) {
-                    available = true;
-                    break;
+            while(R < a.length() && cnt <= N) {
+                if(v.get(a.charAt(R)) == null || v.get(a.charAt(R)) == 0) {
+                    if(cnt == N){
+                        break;
+                    }
+                    v.put(a.charAt(R), 1);
+                    cnt ++;
+                } else {
+                    v.put(a.charAt(R), v.get(a.charAt(R)) + 1);
                 }
-
+                R ++;
             }
-            if (available) ans +=1;
+            ans = Math.max(ans, R - L);
+
+            int num = v.get(a.charAt(L)) - 1;
+            v.put(a.charAt(L) , num);
+
+            if(num == 0) cnt --;
 
         }
+
         System.out.println(ans);
     }
 
-    public static void main(String[] args) {
+    public static void main(String args[])
+    {
         input();
-        pro();
-
+        twoPointer();
     }
-
 
     static class FastReader {
         BufferedReader br;

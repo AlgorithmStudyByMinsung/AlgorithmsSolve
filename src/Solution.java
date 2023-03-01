@@ -1,77 +1,81 @@
-import java.io.*;
-import java.util.Scanner;
-import java.util.StringTokenizer;
-
+/**
+ * 문제의 조건을 잘 파악하는 것이 중요
+ * 그 예시를 잘 파악을 해야한다.
+ * 이 문제는 그래프 이론 문제이지만
+ * 
+ * 아무데도 못가게 된다면 더 이상 가면 안된다. <- 놓친 부분
+ * */
 class Solution {
-    static FastReader scan = new FastReader();
-    static StringBuilder sb = new StringBuilder();
+    int[][] dir = new int[][] {{1 , 0}, {-1 , 0}, {0 , 1}, {0 , -1}};
+    int[][] a;
+    boolean[][] visit;
+    int N; int M;
+    int[] answer;
+    int cnt;
+    public int[] solution(String[][] boards) {
+        answer = new int[boards.length];
 
+        for (String[] board : boards) {
+            // 배열 구성하기
+            N = board.length;
+            M = board[0].length();
 
-    static int N;
+            a = new int[board.length][board[0].length()];
+            visit = new boolean[board.length][board[0].length()];
 
-
-    static void input() {
-        N = scan.nextInt();
-    }
-    static void pro() {
-        for (int i = 1; i <= N; i++) {
-            for (int j = 0; j < i; j++) {
-                sb.append("*");
-            }
-            sb.append('\n');
-        }
-    }
-    public static void main(String[] args) {
-        input();
-        pro();
-        System.out.println(sb);
-        Math.abs()
-
-    }
-
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
+            for (int i = 0; i < board.length; i++) {
+                String s = board[i];
+                for (int j = 0; j < s.length(); j++) {
+                    a[i][j] = s.charAt(j) - '0';
                 }
             }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
+            // dfs
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if (a[i][j] == 2) {
+                        dfs(i , j);
+                    }
+                }
             }
-            return str;
+
+            // check
+            int ans = 1;
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if (a[i][j] == 1 || a[i][j] == 2) {
+                        if (! visit[i][j]) {
+
+                            // 하나라도 false 있다면
+                            ans = 0;
+
+                        }
+                    }
+                }
+            }
+
+            answer[cnt] = ans;
+            cnt ++;
+            System.out.println();
+        }
+
+
+        return answer;
+    }
+
+    public void dfs(int x, int y) {
+        visit[x][y] = true;
+
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dir[i][0];
+            int ny = y + dir[i][1];
+
+            if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
+
+                if (visit[nx][ny]) continue;
+                if (a[nx][ny] == 0 || a[nx][ny] == 2) continue;
+
+                dfs(nx, ny);
+            }
         }
     }
 }

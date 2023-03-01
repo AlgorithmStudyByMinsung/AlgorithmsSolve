@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 /**
  * 트리는 dfs!
  *
- *
  * */
 public class One_my {
     static FastReader scan = new FastReader();

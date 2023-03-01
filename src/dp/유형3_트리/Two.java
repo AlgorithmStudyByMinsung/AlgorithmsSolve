@@ -10,6 +10,12 @@ import java.util.*;
  *
  *
  * */
+/**
+ * 트리 dp 는
+ * 다 비슷하고 유형을 익혀야 한다.
+ *
+ *
+ * */
 public class Two {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
